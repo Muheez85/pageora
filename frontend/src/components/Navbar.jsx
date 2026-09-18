@@ -9,12 +9,12 @@ import {
   UserRound,
 } from "lucide-react";
 import useCartStore from "../store/cartStore";
-
+import { getWishlist } from "../services/wishlistService";
 const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+ const [wishlistCount, setWishlistCount] = useState(0);
   const navigate = useNavigate();
 
 const { cartCount, fetchCart } = useCartStore();
@@ -43,7 +43,27 @@ useEffect(() => {
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
   };
+useEffect(() => {
+  const loadWishlistCount = async () => {
+    const token = localStorage.getItem("token");
 
+    if (!token) {
+      setWishlistCount(0);
+      return;
+    }
+
+    try {
+      const wishlist = await getWishlist();
+
+      setWishlistCount(wishlist.length);
+    } catch (error) {
+      console.error("GET WISHLIST COUNT ERROR:", error);
+      setWishlistCount(0);
+    }
+  };
+
+  loadWishlistCount();
+}, []);
   return (
     <header className="border-b border-[#DED8CC] bg-[#FFFDF8]">
       <div className="container mx-auto px-6">
@@ -102,14 +122,18 @@ useEffect(() => {
             </button>
 
             {/* Wishlist */}
-            <button
-              type="button"
-              aria-label="Wishlist"
-              className="p-2 text-[#17211D] transition hover:text-[#E86A2A]"
+            <Link
+              to="/wishlist"
+              className="relative flex items-center gap-2 text-sm text-[#17211D] transition hover:text-[#E86A2A]"
             >
-              <Heart size={21} strokeWidth={1.8} />
-            </button>
+              Wishlist
 
+              {wishlistCount > 0 && (
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#E86A2A] px-1.5 text-[10px] font-semibold text-white">
+                  {wishlistCount}
+                </span>
+              )}
+            </Link>
             {/* Cart */}
             <button
               type="button"

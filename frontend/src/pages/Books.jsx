@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { getBooks } from "../services/bookService";
 import { getCategories } from "../services/categoryService";
 import BookCard from "../components/BookCard";
-
+import Footer from "../components/Footer";
 const Books = () => {
   const [books, setBooks] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -85,7 +85,7 @@ const Books = () => {
   });
 
   return (
-    <main className="bg-[#F7F3EC] py-16 md:py-20">
+    <main className="bg-[#F7F3EC]  ">
       <div className="container mx-auto px-6">
 
         {/* Heading */}
@@ -214,6 +214,7 @@ const Books = () => {
         )}
 
       </div>
+      <Footer />
     </main>
   );
 };

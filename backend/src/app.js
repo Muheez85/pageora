@@ -8,6 +8,14 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const authorRoutes = require("./routes/authorRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const authRoutes = require("./routes/authRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+const shippingRoutes = require("./routes/shippingRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
+const userRoutes = require("./routes/userRoutes");
+const addressRoutes = require("./routes/addressRoutes");
+const settingsRoutes = require("./routes/settingsRoutes");
+const wishlistRoutes = require("./routes/wishlistRoutes");
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -17,6 +25,13 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/authors", authorRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/auth", authRoutes)
+app.use("/api/orders", orderRoutes);
+app.use("/api/shipping", shippingRoutes);
+app.use("/api/payments", paymentRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/users/addresses", addressRoutes);
+app.use("/api/settings", settingsRoutes);
+app.use("/api/wishlist", wishlistRoutes);
 // Test route
 
 app.get("/", (req, res) => {
