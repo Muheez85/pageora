@@ -1,0 +1,46 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap");
+
+@import "tailwindcss";
+
+:root {
+  --pageora-green: #124C3B;
+  --pageora-orange: #E86A2A;
+  --pageora-background: #F7F3EC;
+  --pageora-surface: #FFFDF8;
+  --pageora-text: #17211D;
+  --pageora-muted: #6F756F;
+  --pageora-border: #DED8CC;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--pageora-background);
+  color: var(--pageora-text);
+  font-family: "Inter", sans-serif;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: "DM Serif Display", serif;
+}
