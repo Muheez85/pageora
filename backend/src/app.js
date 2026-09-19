@@ -15,7 +15,8 @@ const userRoutes = require("./routes/userRoutes");
 const addressRoutes = require("./routes/addressRoutes");
 const settingsRoutes = require("./routes/settingsRoutes");
 const wishlistRoutes = require("./routes/wishlistRoutes");
-
+const adminRoutes = require("./routes/admin/adminRoutes");
+const adminBookRoutes = require("./routes/admin/adminBookRoutes");
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -32,6 +33,11 @@ app.use("/api/users", userRoutes);
 app.use("/api/users/addresses", addressRoutes);
 app.use("/api/settings", settingsRoutes);
 app.use("/api/wishlist", wishlistRoutes);
+
+
+
+app.use("/api/admin", adminRoutes);
+app.use("/api/admin/books", adminBookRoutes);
 // Test route
 
 app.get("/", (req, res) => {

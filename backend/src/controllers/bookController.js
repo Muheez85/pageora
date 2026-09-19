@@ -1,14 +1,76 @@
 const prisma = require("../config/db");
 const cloudinary = require("../config/cloudinary");
-const slugify = require("../utils/slugify");
 
-// GET ALL BOOK
+// Create a URL-friendly slug
+const createSlug = (title) => {
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+};
+
+// Make sure slug is unique
+const generateUniqueSlug = async (title, bookId = null) => {
+  const baseSlug = createSlug(title);
+
+  let slug = baseSlug;
+  let counter = 1;
+
+  while (true) {
+    const existingBook = await prisma.book.findFirst({
+      where: {
+        slug,
+        ...(bookId && {
+          NOT: {
+            id: bookId,
+          },
+        }),
+      },
+    });
+
+    if (!existingBook) {
+      return slug;
+    }
+
+    slug = `${baseSlug}-${counter}`;
+    counter++;
+  }
+};
+
+// Upload image to Cloudinary
+const uploadToCloudinary = (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder: "pageora/books",
+        resource_type: "image",
+      },
+      (error, result) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+
+        resolve(result);
+      }
+    );
+
+    uploadStream.end(fileBuffer);
+  });
+};
+
+// Get all books
 const getBooks = async (req, res) => {
   try {
     const books = await prisma.book.findMany({
       include: {
-        authors: true,
         category: true,
+        authors: true,
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
 
@@ -17,7 +79,7 @@ const getBooks = async (req, res) => {
       books,
     });
   } catch (error) {
-    console.error(error);
+    console.error("GET BOOKS ERROR:", error);
 
     res.status(500).json({
       success: false,
@@ -26,18 +88,16 @@ const getBooks = async (req, res) => {
   }
 };
 
-//   GET BOOK BY slug
+// Get book by slug
 const getBookBySlug = async (req, res) => {
   try {
-    const { slug } = req.params;
-
     const book = await prisma.book.findUnique({
       where: {
-        slug,
+        slug: req.params.slug,
       },
       include: {
-        authors: true,
         category: true,
+        authors: true,
       },
     });
 
@@ -53,7 +113,7 @@ const getBookBySlug = async (req, res) => {
       book,
     });
   } catch (error) {
-    console.error(error);
+    console.error("GET BOOK BY SLUG ERROR:", error);
 
     res.status(500).json({
       success: false,
@@ -62,7 +122,7 @@ const getBookBySlug = async (req, res) => {
   }
 };
 
-
+// Create book
 const createBook = async (req, res) => {
   try {
     const {
@@ -71,60 +131,76 @@ const createBook = async (req, res) => {
       price,
       stock,
       isbn,
+      coverImage,
       categoryId,
       authorIds,
     } = req.body;
 
-    let coverImage;
-const slug = slugify(title);
-    // Upload book cover to Cloudinary
-    if (req.file) {
-      const result = await new Promise((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
-          {
-            folder: "pageora/books",
-          },
-          (error, result) => {
-            if (error) {
-              reject(error);
-            } else {
-              resolve(result);
-            }
-          }
-        );
-
-        uploadStream.end(req.file.buffer);
+    if (
+      !title ||
+      price === undefined ||
+      stock === undefined ||
+      !isbn ||
+      !categoryId
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Required book information is missing",
       });
-
-      coverImage = result.secure_url;
     }
 
+    // Generate unique slug
+    const slug = await generateUniqueSlug(title);
+
+    // Parse author IDs
+    let parsedAuthorIds = [];
+
+    if (authorIds) {
+      try {
+        parsedAuthorIds =
+          typeof authorIds === "string"
+            ? JSON.parse(authorIds)
+            : authorIds;
+      } catch {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid author information",
+        });
+      }
+    }
+
+    // Upload cover image if provided
+    let uploadedImageUrl = null;
+
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer);
+      uploadedImageUrl = result.secure_url;
+    }
+
+    // Create book
     const book = await prisma.book.create({
       data: {
         title,
         slug,
-        description,
+        description: description || null,
         price: Number(price),
         stock: Number(stock),
-        isbn,
-        coverImage,
+        isbn: isbn || null,
+        coverImage: uploadedImageUrl || coverImage || null,
+        categoryId: Number(categoryId),
 
-        category: {
-          connect: {
-            id: Number(categoryId),
-          },
-        },
-
-            authors: {
-        connect: (Array.isArray(authorIds) ? authorIds : [authorIds]).map((id) => ({
-          id: Number(id),
-        })),
-      },
+        authors: parsedAuthorIds.length
+          ? {
+              connect: parsedAuthorIds.map((id) => ({
+                id: Number(id),
+              })),
+            }
+          : undefined,
       },
 
       include: {
-        authors: true,
         category: true,
+        authors: true,
       },
     });
 
@@ -133,57 +209,129 @@ const slug = slugify(title);
       message: "Book created successfully",
       book,
     });
-
   } catch (error) {
-    console.error(error);
+    console.error("CREATE BOOK ERROR:", error);
 
-    res.status(500).json({
+    res.status(400).json({
       success: false,
-      message: "Failed to create book",
+      message: error.message || "Failed to create book",
     });
   }
 };
 
-
+// Update book
 const updateBook = async (req, res) => {
   try {
     const bookId = Number(req.params.id);
 
-    const { title, description, price, stock } = req.body;
+    // Find existing book
+    const existingBook = await prisma.book.findUnique({
+      where: {
+        id: bookId,
+      },
+    });
 
-    let imageUrl;
-
-    if (req.file) {
-      const result = await new Promise((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
-          {
-            folder: "pageora/books",
-          },
-          (error, result) => {
-            if (error) {
-              reject(error);
-            } else {
-              resolve(result);
-            }
-          }
-        );
-
-        uploadStream.end(req.file.buffer);
+    if (!existingBook) {
+      return res.status(404).json({
+        success: false,
+        message: "Book not found",
       });
-
-      imageUrl = result.secure_url;
     }
 
+    const {
+      title,
+      description,
+      price,
+      stock,
+      isbn,
+      coverImage,
+      categoryId,
+      authorIds,
+    } = req.body;
+
+    // Parse author IDs
+    let parsedAuthorIds;
+
+    if (authorIds !== undefined) {
+      try {
+        parsedAuthorIds =
+          typeof authorIds === "string"
+            ? JSON.parse(authorIds)
+            : authorIds;
+      } catch {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid author information",
+        });
+      }
+    }
+
+    // Generate a new slug only if title changed
+    const slug =
+      title && title !== existingBook.title
+        ? await generateUniqueSlug(title, bookId)
+        : existingBook.slug;
+
+    // Upload new cover image if provided
+    let uploadedImageUrl = existingBook.coverImage;
+
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer);
+      uploadedImageUrl = result.secure_url;
+    } else if (coverImage !== undefined) {
+      uploadedImageUrl = coverImage || null;
+    }
+
+    // Update book
     const book = await prisma.book.update({
       where: {
         id: bookId,
       },
+
       data: {
-        ...(title && { title }),
-        ...(description && { description }),
-        ...(price && { price: Number(price) }),
-        ...(stock && { stock: Number(stock) }),
-        ...(imageUrl && { coverImage: imageUrl }),
+        title: title ?? existingBook.title,
+
+        slug,
+
+        description:
+          description !== undefined
+            ? description || null
+            : existingBook.description,
+
+        price:
+          price !== undefined
+            ? Number(price)
+            : existingBook.price,
+
+        stock:
+          stock !== undefined
+            ? Number(stock)
+            : existingBook.stock,
+
+        isbn:
+          isbn !== undefined
+            ? isbn || null
+            : existingBook.isbn,
+
+        coverImage: uploadedImageUrl,
+
+        categoryId:
+          categoryId !== undefined
+            ? Number(categoryId)
+            : existingBook.categoryId,
+
+        ...(parsedAuthorIds !== undefined && {
+          authors: {
+            set: parsedAuthorIds.map((id) => ({
+              id: Number(id),
+            })),
+          },
+        }),
+      },
+
+      include: {
+        category: true,
+        authors: true,
       },
     });
 
@@ -192,24 +340,58 @@ const updateBook = async (req, res) => {
       message: "Book updated successfully",
       book,
     });
-
   } catch (error) {
-    console.error(error);
+    console.error("UPDATE BOOK ERROR:", error);
 
-    res.status(500).json({
+    res.status(400).json({
       success: false,
-      message: "Failed to update book",
+      message: error.message || "Failed to update book",
     });
   }
 };
 
+// Delete book
+const deleteBook = async (req, res) => {
+  try {
+    const bookId = Number(req.params.id);
 
+    const existingBook = await prisma.book.findUnique({
+      where: {
+        id: bookId,
+      },
+    });
 
+    if (!existingBook) {
+      return res.status(404).json({
+        success: false,
+        message: "Book not found",
+      });
+    }
 
+    await prisma.book.delete({
+      where: {
+        id: bookId,
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Book deleted successfully",
+    });
+  } catch (error) {
+    console.error("DELETE BOOK ERROR:", error);
+
+    res.status(400).json({
+      success: false,
+      message: error.message || "Failed to delete book",
+    });
+  }
+};
 
 module.exports = {
   getBooks,
   getBookBySlug,
   createBook,
   updateBook,
+  deleteBook,
 };
