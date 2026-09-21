@@ -161,3 +161,18 @@ model WishlistItem {
 
   @@unique([userId, bookId])
 }
+
+model StoreSettings {
+  id          Int      @id @default(1)
+  storeName   String   @default("Pageora")
+  email       String   @default("")
+  phone       String   @default("")
+  address     String   @default("")
+  city        String   @default("")
+  state       String   @default("")
+  country     String   @default("Nigeria")
+  currency    String   @default("NGN")
+  description String   @default("")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

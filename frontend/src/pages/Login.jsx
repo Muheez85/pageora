@@ -1,55 +1,65 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, BookOpen } from "lucide-react";
+import {
+  ArrowLeft,
+  BookOpen,
+  Eye,
+  EyeOff,
+} from "lucide-react";
+
 import { loginUser } from "../services/authService";
 
-
 const Login = () => {
- 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-const [formData, setFormData] = useState({
-  email: "",
-  password: "",
-});
-
-const [loading, setLoading] = useState(false);
-const [error, setError] = useState("");
-
-
- const handleChange = (e) => {
-  setFormData({
-    ...formData,
-    [e.target.name]: e.target.value,
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
   });
-};
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  setError("");
-  setLoading(true);
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-  try {
-    const data = await loginUser(formData);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    console.log("LOGIN SUCCESS:", data);
+    setError("");
+    setLoading(true);
 
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
+    try {
+      const data = await loginUser(formData);
 
-    navigate("/");
-  } catch (error) {
-    console.error("LOGIN ERROR:", error);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+      );
 
-    setError(
-      error.response?.data?.message ||
-        "Something went wrong. Please try again."
-    );
-  } finally {
-    setLoading(false);
-  }
-};
+      if (data.user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("LOGIN ERROR:", error);
+
+      setError(
+        error.response?.data?.message ||
+          "Something went wrong. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-[var(--pageora-background)] flex items-center justify-center px-6 py-12">
       <div className="w-full max-w-md">
@@ -57,19 +67,19 @@ const handleSubmit = async (e) => {
         {/* Back to home */}
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-sm text-[var(--pageora-muted)] hover:text-[var(--pageora-green)] transition mb-8"
+          className="mb-8 inline-flex items-center gap-2 text-sm text-[var(--pageora-muted)] transition hover:text-[var(--pageora-green)]"
         >
           <ArrowLeft size={16} />
           Back to home
         </Link>
 
-        {/* Logo / heading */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-[var(--pageora-green)] text-white rounded-full mb-5">
+        {/* Logo / Heading */}
+        <div className="mb-8 text-center">
+          <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full bg-[var(--pageora-green)] text-white">
             <BookOpen size={22} />
           </div>
 
-          <h1 className="text-4xl text-[var(--pageora-text)] mb-3">
+          <h1 className="mb-3 text-4xl text-[var(--pageora-text)]">
             Welcome back
           </h1>
 
@@ -78,34 +88,45 @@ const handleSubmit = async (e) => {
           </p>
         </div>
 
-        {/* Login form */}
-        <div className="bg-[var(--pageora-surface)] border border-[var(--pageora-border)] p-7 sm:p-8">
-          <form onSubmit={handleSubmit} className="space-y-5">
+        {/* Login Card */}
+        <div className="border border-[var(--pageora-border)] bg-[var(--pageora-surface)] p-7 sm:p-8">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-5"
+          >
+
+            {/* Error */}
+            {error && (
+              <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+                {error}
+              </div>
+            )}
 
             {/* Email */}
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium mb-2"
+                className="mb-2 block text-sm font-medium"
               >
                 Email address
               </label>
 
               <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    placeholder="you@example.com"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full border border-[var(--pageora-border)] bg-white px-4 py-3 outline-none focus:border-[var(--pageora-green)] rounded-3xl transition"
-                    />
+                id="email"
+                name="email"
+                type="email"
+                required
+                autoComplete="email"
+                placeholder="you@example.com"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full rounded-3xl border border-[var(--pageora-border)] bg-white px-4 py-3 outline-none transition focus:border-[var(--pageora-green)]"
+              />
             </div>
 
             {/* Password */}
             <div>
-              <div className="flex items-center justify-between mb-2">
+              <div className="mb-2 flex items-center justify-between">
                 <label
                   htmlFor="password"
                   className="block text-sm font-medium"
@@ -121,42 +142,66 @@ const handleSubmit = async (e) => {
                 </button>
               </div>
 
-            <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                placeholder="Enter your password"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full border border-[var(--pageora-border)] bg-white px-4 py-3 outline-none focus:border-[var(--pageora-green)]  rounded-3xl transition"
+              <div className="relative">
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  autoComplete="current-password"
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="w-full rounded-3xl border border-[var(--pageora-border)] bg-white px-4 py-3 pr-12 outline-none transition focus:border-[var(--pageora-green)]"
                 />
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowPassword((current) => !current)
+                  }
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--pageora-muted)] transition hover:text-[var(--pageora-green)]"
+                  aria-label={
+                    showPassword
+                      ? "Hide password"
+                      : "Show password"
+                  }
+                >
+                  {showPassword ? (
+                    <EyeOff size={18} />
+                  ) : (
+                    <Eye size={18} />
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* Submit */}
-         <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-[var(--pageora-green)] text-white py-3.5 font-medium hover:bg-[#0d3d30] transition disabled:opacity-60  rounded-3xl disabled:cursor-not-allowed"
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-3xl bg-[var(--pageora-green)] py-3.5 font-medium text-white transition hover:bg-[#0d3d30] disabled:cursor-not-allowed disabled:opacity-60"
             >
-            {loading ? "Signing in..." : "Sign in"}
+              {loading ? "Signing in..." : "Sign in"}
             </button>
           </form>
 
-          {/* Sign up */}
-          <p className="text-center text-sm text-[var(--pageora-muted)] mt-7">
+          {/* Sign Up */}
+          <p className="mt-7 text-center text-sm text-[var(--pageora-muted)]">
             Don't have an account?{" "}
             <Link
               to="/signup"
-              className="text-[var(--pageora-green)] font-medium hover:underline"
+              className="font-medium text-[var(--pageora-green)] hover:underline"
             >
               Create one
             </Link>
           </p>
         </div>
 
-        <p className="text-center text-xs text-[var(--pageora-muted)] mt-6">
-          By signing in, you agree to Pageora's terms and privacy policy.
+        {/* Terms */}
+        <p className="mt-6 text-center text-xs text-[var(--pageora-muted)]">
+          By signing in, you agree to Pageora's terms and
+          privacy policy.
         </p>
       </div>
     </main>

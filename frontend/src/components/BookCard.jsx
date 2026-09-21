@@ -35,29 +35,42 @@ const BookCard = ({ book }) => {
   }, [book.id]);
 
   const handleWishlist = async () => {
-    const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
-    if (!token) {
-      navigate("/login");
-      return;
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  try {
+    setWishlistLoading(true);
+
+    if (isWishlisted) {
+      await removeFromWishlist(book.id);
+
+      setIsWishlisted(false);
+
+      window.dispatchEvent(
+        new Event("wishlistUpdated")
+      );
+    } else {
+      await addToWishlist(book.id);
+
+      setIsWishlisted(true);
+
+      window.dispatchEvent(
+        new Event("wishlistUpdated")
+      );
     }
-
-    try {
-      setWishlistLoading(true);
-
-      if (isWishlisted) {
-        await removeFromWishlist(book.id);
-        setIsWishlisted(false);
-      } else {
-        await addToWishlist(book.id);
-        setIsWishlisted(true);
-      }
-    } catch (error) {
-      console.error("WISHLIST ERROR:", error);
-    } finally {
-      setWishlistLoading(false);
-    }
-  };
+  } catch (error) {
+    console.error(
+      "WISHLIST ERROR:",
+      error
+    );
+  } finally {
+    setWishlistLoading(false);
+  }
+};
 
   return (
     <article className="group  mb-5 min-w-0 overflow-hidden rounded-xl border border-[#17211D] bg-[#FFFDF8]">

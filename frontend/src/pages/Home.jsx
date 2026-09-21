@@ -3,7 +3,6 @@ import CategoriesSection from "../sections/Home/CategoriesSection";
 import FeaturedBooks from "../sections/Home/FeaturedBooks";
 import WhyChooseUs from "../sections/Home/WhyChooseUs";
 import Newsletter from "../sections/Home/NewsLetter";
-import Footer from "../components/Footer";
 const Home = () => {
   return (
     <>
@@ -12,7 +11,6 @@ const Home = () => {
       <FeaturedBooks />
       <WhyChooseUs />
       <Newsletter />
-      <Footer />
     </>
   );
 };

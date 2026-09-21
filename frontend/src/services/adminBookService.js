@@ -1,14 +1,5 @@
 import api from "../api/axios";
 
-export const loginUser = async (credentials) => {
-  const response = await api.post("/auth/login", credentials);
-
-  return response.data;
-};
-import axios from "axios";
-
-const API_URL = "http://localhost:5000/api/admin/books";
-
 const getAuthConfig = () => {
   const token = localStorage.getItem("token");
 
@@ -21,8 +12,8 @@ const getAuthConfig = () => {
 
 // Get all admin books
 export const getAdminBooks = async () => {
-  const response = await axios.get(
-    API_URL,
+  const response = await api.get(
+    "/admin/books",
     getAuthConfig()
   );
 
@@ -31,8 +22,8 @@ export const getAdminBooks = async () => {
 
 // Create book
 export const createAdminBook = async (formData) => {
-  const response = await axios.post(
-    API_URL,
+  const response = await api.post(
+    "/admin/books",
     formData,
     getAuthConfig()
   );
@@ -42,8 +33,8 @@ export const createAdminBook = async (formData) => {
 
 // Update book
 export const updateAdminBook = async (id, formData) => {
-  const response = await axios.put(
-    `${API_URL}/${id}`,
+  const response = await api.put(
+    `/admin/books/${id}`,
     formData,
     getAuthConfig()
   );
@@ -53,10 +44,24 @@ export const updateAdminBook = async (id, formData) => {
 
 // Delete book
 export const deleteAdminBook = async (id) => {
-  const response = await axios.delete(
-    `${API_URL}/${id}`,
+  const response = await api.delete(
+    `/admin/books/${id}`,
     getAuthConfig()
   );
+
+  return response.data;
+};
+
+// Get categories
+export const getBookCategories = async () => {
+  const response = await api.get("/categories");
+
+  return response.data;
+};
+
+// Get authors
+export const getBookAuthors = async () => {
+  const response = await api.get("/authors");
 
   return response.data;
 };

@@ -1,70 +1,92 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Lock } from "lucide-react";
+import { ArrowLeft, Lock, Plus } from "lucide-react";
 
 import { getCart } from "../services/cartService";
 import { createOrder } from "../services/orderService";
 import { getShippingLocations } from "../services/shippingService";
-import useCartStore from "../store/cartStore";
+import {
+  getAddresses,
+  createAddress,
+} from "../services/addressService";
+
+const emptyCheckout = {
+  shippingName: "",
+  shippingPhone: "",
+  shippingAddress: "",
+  shippingCity: "",
+  shippingState: "",
+  shippingCountry: "Nigeria",
+};
+
+const emptyAddress = {
+  label: "Home",
+  fullName: "",
+  phone: "",
+  address: "",
+  city: "",
+  state: "",
+  country: "Nigeria",
+  isDefault: false,
+};
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { fetchCart } = useCartStore();
 
   const [cart, setCart] = useState(null);
   const [shippingLocations, setShippingLocations] = useState([]);
+  const [addresses, setAddresses] = useState([]);
+
   const [shippingLocationId, setShippingLocationId] = useState("");
+  const [selectedAddressId, setSelectedAddressId] = useState("");
+
+  const [formData, setFormData] = useState(emptyCheckout);
+  const [addressForm, setAddressForm] = useState(emptyAddress);
 
   const [loading, setLoading] = useState(true);
   const [placingOrder, setPlacingOrder] = useState(false);
+  const [savingAddress, setSavingAddress] = useState(false);
+  const [showAddressForm, setShowAddressForm] = useState(false);
+
   const [error, setError] = useState("");
+  const [addressError, setAddressError] = useState("");
 
-  const [formData, setFormData] = useState({
-    shippingName: "",
-    shippingPhone: "",
-    shippingAddress: "",
-    shippingCity: "",
-    shippingState: "",
-    shippingCountry: "Nigeria",
-  });
-
-  // Load cart and shipping locations
   useEffect(() => {
     const loadCheckout = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        navigate("/login");
+      if (!localStorage.getItem("token")) {
+        navigate("/login", { replace: true });
         return;
       }
 
       try {
-        setLoading(true);
-        setError("");
-
-        // Get cart
-        const cartData = await getCart();
+        const [cartData, locations, savedAddresses] =
+          await Promise.all([
+            getCart(),
+            getShippingLocations(),
+            getAddresses(),
+          ]);
 
         if (!cartData?.items?.length) {
-          navigate("/cart");
+          navigate("/cart", { replace: true });
           return;
         }
 
-        // Set cart immediately because it loaded successfully
         setCart(cartData);
+        setShippingLocations(locations || []);
+        setAddresses(savedAddresses || []);
 
-        // Get available shipping locations
-        const locations = await getShippingLocations();
-
-        setShippingLocations(
-          Array.isArray(locations) ? locations : []
+        const defaultAddress = (savedAddresses || []).find(
+          (address) => address.isDefault
         );
+
+        if (defaultAddress) {
+          selectAddress(defaultAddress);
+        }
       } catch (error) {
         console.error("CHECKOUT LOAD ERROR:", error);
-
         setError(
           error.response?.data?.message ||
-            "We couldn't load checkout information."
+            "Could not load checkout."
         );
       } finally {
         setLoading(false);
@@ -74,7 +96,21 @@ const Checkout = () => {
     loadCheckout();
   }, [navigate]);
 
-  // Handle form inputs
+  const selectAddress = (address) => {
+    setSelectedAddressId(String(address.id));
+
+    setFormData({
+      shippingName: address.fullName || "",
+      shippingPhone: address.phone || "",
+      shippingAddress: address.address || "",
+      shippingCity: address.city || "",
+      shippingState: address.state || "",
+      shippingCountry: address.country || "Nigeria",
+    });
+
+    setError("");
+  };
+
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -83,77 +119,133 @@ const Checkout = () => {
       [name]: value,
     }));
 
-    // Clear an existing error while the user edits the form
-    if (error) {
-      setError("");
-    }
+    setError("");
   };
 
-  // Handle shipping location
-  const handleShippingLocationChange = (event) => {
-    setShippingLocationId(event.target.value);
+  const handleAddressChange = (event) => {
+    const { name, value, type, checked } = event.target;
 
-    if (error) {
-      setError("");
-    }
+    setAddressForm((current) => ({
+      ...current,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+
+    setAddressError("");
   };
 
-  // Submit order
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleAddressSelect = (event) => {
+    const id = event.target.value;
 
-    // Make sure a delivery location is selected
-    if (!shippingLocationId) {
-      setError("Please select your delivery location.");
+    setSelectedAddressId(id);
+
+    if (!id) {
+      setFormData(emptyCheckout);
       return;
     }
 
-    // Make sure the selected location actually exists
-    const selectedLocation = shippingLocations.find(
-      (location) =>
-        location.id === Number(shippingLocationId)
+    const address = addresses.find(
+      (item) => item.id === Number(id)
     );
 
-    if (!selectedLocation) {
-      setError(
-        "The selected delivery location is no longer available."
+    if (address) {
+      selectAddress(address);
+    }
+  };
+
+  const saveAddress = async () => {
+    setAddressError("");
+
+    if (
+      !addressForm.fullName ||
+      !addressForm.phone ||
+      !addressForm.address ||
+      !addressForm.city ||
+      !addressForm.state ||
+      !addressForm.country
+    ) {
+      setAddressError("Please complete all address fields.");
+      return;
+    }
+
+    try {
+      setSavingAddress(true);
+
+      const newAddress = await createAddress(addressForm);
+      const updatedAddresses = await getAddresses();
+
+      setAddresses(updatedAddresses);
+
+      const savedAddress =
+        updatedAddresses.find(
+          (address) => address.id === newAddress.id
+        ) || newAddress;
+
+      selectAddress(savedAddress);
+
+      setAddressForm(emptyAddress);
+      setShowAddressForm(false);
+    } catch (error) {
+      console.error("SAVE ADDRESS ERROR:", error);
+      setAddressError(
+        error.response?.data?.message ||
+          "Could not save address."
       );
+    } finally {
+      setSavingAddress(false);
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (placingOrder) return;
+
+    if (
+      !formData.shippingName ||
+      !formData.shippingPhone ||
+      !formData.shippingAddress ||
+      !formData.shippingCity ||
+      !formData.shippingState ||
+      !formData.shippingCountry
+    ) {
+      setError("Please complete your delivery information.");
+      return;
+    }
+
+    if (!shippingLocationId) {
+      setError("Please select your delivery location.");
       return;
     }
 
     try {
       setPlacingOrder(true);
       setError("");
-        const data = await createOrder({
+
+      const data = await createOrder({
         ...formData,
         shippingLocationId: Number(shippingLocationId),
-        });
-
-        navigate(`/payment/${data.order.id}`);
+      });
 
       if (!data?.order?.id) {
-        throw new Error("Order was created but no order ID was returned.");
+        throw new Error("Order could not be created.");
       }
 
-      // Refresh cart count/store after order creation
-      await fetchCart();
-
-      // Continue to order details
-      navigate(`/orders/${data.order.id}`);
+      // Payment comes next.
+      // Cart and stock are not changed yet.
+      navigate(`/payment/${data.order.id}`);
     } catch (error) {
       console.error("CREATE ORDER ERROR:", error);
 
       setError(
         error.response?.data?.message ||
           error.message ||
-          "We couldn't place your order. Please try again."
+          "Could not create your order."
       );
     } finally {
       setPlacingOrder(false);
     }
   };
 
-  // Loading state
   if (loading) {
     return (
       <main className="min-h-[70vh]">
@@ -166,18 +258,15 @@ const Checkout = () => {
     );
   }
 
-  // Cart failed to load
   if (error && !cart) {
     return (
       <main className="min-h-[70vh]">
         <div className="container mx-auto px-6 py-20">
-          <p className="text-sm text-red-600">
-            {error}
-          </p>
+          <p className="text-sm text-red-600">{error}</p>
 
           <Link
             to="/cart"
-            className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-[#124C3B]"
+            className="mt-6 inline-flex items-center gap-2 text-sm text-[#124C3B]"
           >
             <ArrowLeft size={17} />
             Back to cart
@@ -189,7 +278,6 @@ const Checkout = () => {
 
   const items = cart?.items || [];
 
-  // Calculate subtotal
   const subtotal = items.reduce(
     (total, item) =>
       total +
@@ -197,28 +285,24 @@ const Checkout = () => {
     0
   );
 
-  // Find selected shipping location
-  const selectedShippingLocation = shippingLocations.find(
+  const selectedLocation = shippingLocations.find(
     (location) =>
       location.id === Number(shippingLocationId)
   );
 
-  // Calculate shipping fee
-  const shippingFee = selectedShippingLocation
-    ? Number(selectedShippingLocation.fee)
+  const shippingFee = selectedLocation
+    ? Number(selectedLocation.fee)
     : 0;
 
-  // Calculate final total
   const total = subtotal + shippingFee;
 
   return (
     <main className="min-h-[70vh]">
       <div className="container mx-auto px-6 py-10 sm:py-14">
-        {/* Header */}
         <div className="mb-10">
           <Link
             to="/cart"
-            className="mb-5 inline-flex items-center gap-2 text-sm text-[#6F756F] transition hover:text-[#124C3B]"
+            className="mb-5 inline-flex items-center gap-2 text-sm text-[#6F756F] hover:text-[#124C3B]"
           >
             <ArrowLeft size={17} />
             Back to cart
@@ -228,111 +312,228 @@ const Checkout = () => {
             Checkout
           </h1>
 
-          <p className="mt-3 max-w-xl text-sm leading-6 text-[#6F756F] sm:text-base">
-            Enter your delivery details and review your
-            order before placing it.
+          <p className="mt-3 text-sm text-[#6F756F] sm:text-base">
+            Confirm your delivery details before payment.
           </p>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="grid gap-8 lg:grid-cols-[1.4fr_0.8fr]">
-            {/* Shipping information */}
-            <section className="border border-[#DED8CC] bg-[#FFFDF8] p-5 sm:p-7">
-              <div className="mb-7">
+            {/* LEFT */}
+            <div className="space-y-8">
+              {/* SAVED ADDRESSES */}
+              <section className="border border-[#DED8CC] bg-[#FFFDF8] p-5 sm:p-7">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <h2 className="text-2xl text-[#124C3B]">
+                      Delivery address
+                    </h2>
+
+                    <p className="mt-2 text-sm text-[#6F756F]">
+                      Choose a saved address or add a new one.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setShowAddressForm(!showAddressForm)
+                    }
+                    className="inline-flex items-center gap-2 text-sm font-medium text-[#124C3B]"
+                  >
+                    <Plus size={17} />
+                    Add
+                  </button>
+                </div>
+
+                {addresses.length > 0 && (
+                  <select
+                    value={selectedAddressId}
+                    onChange={handleAddressSelect}
+                    className="mt-6 w-full border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                  >
+                    <option value="">
+                      Select a saved address
+                    </option>
+
+                    {addresses.map((address) => (
+                      <option
+                        key={address.id}
+                        value={address.id}
+                      >
+                        {address.label}
+                        {address.isDefault
+                          ? " (Default)"
+                          : ""}
+                      </option>
+                    ))}
+                  </select>
+                )}
+
+                {/* NEW ADDRESS */}
+                {showAddressForm && (
+                  <div className="mt-7 border-t border-[#DED8CC] pt-7">
+                    <h3 className="text-xl text-[#124C3B]">
+                      Add new address
+                    </h3>
+
+                    <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                      <input
+                        name="label"
+                        value={addressForm.label}
+                        onChange={handleAddressChange}
+                        placeholder="Label e.g. Home"
+                        className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                      />
+
+                      <input
+                        name="fullName"
+                        value={addressForm.fullName}
+                        onChange={handleAddressChange}
+                        placeholder="Full name"
+                        className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                      />
+
+                      <input
+                        name="phone"
+                        value={addressForm.phone}
+                        onChange={handleAddressChange}
+                        placeholder="Phone number"
+                        className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                      />
+
+                      <input
+                        name="city"
+                        value={addressForm.city}
+                        onChange={handleAddressChange}
+                        placeholder="City"
+                        className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                      />
+
+                      <input
+                        name="state"
+                        value={addressForm.state}
+                        onChange={handleAddressChange}
+                        placeholder="State"
+                        className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                      />
+
+                      <input
+                        name="country"
+                        value={addressForm.country}
+                        onChange={handleAddressChange}
+                        placeholder="Country"
+                        className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                      />
+
+                      <textarea
+                        name="address"
+                        value={addressForm.address}
+                        onChange={handleAddressChange}
+                        placeholder="Full delivery address"
+                        rows="3"
+                        className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B] sm:col-span-2"
+                      />
+
+                      <label className="flex items-center gap-2 text-sm text-[#6F756F]">
+                        <input
+                          type="checkbox"
+                          name="isDefault"
+                          checked={addressForm.isDefault}
+                          onChange={handleAddressChange}
+                        />
+                        Make this my default address
+                      </label>
+                    </div>
+
+                    {addressError && (
+                      <p className="mt-4 text-sm text-red-600">
+                        {addressError}
+                      </p>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={saveAddress}
+                      disabled={savingAddress}
+                      className="mt-5 bg-[#124C3B] px-5 py-3 text-sm font-medium text-white disabled:opacity-50"
+                    >
+                      {savingAddress
+                        ? "Saving..."
+                        : "Save address"}
+                    </button>
+                  </div>
+                )}
+              </section>
+
+              {/* SHIPPING DETAILS */}
+              <section className="border border-[#DED8CC] bg-[#FFFDF8] p-5 sm:p-7">
                 <h2 className="text-2xl text-[#124C3B]">
                   Shipping information
                 </h2>
 
-                <p className="mt-2 text-sm text-[#6F756F]">
-                  Where should we deliver your books?
-                </p>
-              </div>
-
-              <div className="grid gap-5 sm:grid-cols-2">
-                {/* Full name */}
-                <div className="sm:col-span-2">
-                  <label
-                    htmlFor="shippingName"
-                    className="mb-2 block text-sm font-medium text-[#17211D]"
-                  >
-                    Full name
-                  </label>
-
+                <div className="mt-6 grid gap-5 sm:grid-cols-2">
                   <input
-                    id="shippingName"
                     name="shippingName"
-                    type="text"
                     value={formData.shippingName}
                     onChange={handleChange}
-                    required
-                    placeholder="Your full name"
-                    className="w-full border border-[#DED8CC] bg-[#F7F3EC] px-4 py-3 text-sm text-[#17211D] outline-none transition focus:border-[#124C3B]"
+                    placeholder="Full name"
+                    className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
                   />
-                </div>
-
-                {/* Phone */}
-                <div>
-                  <label
-                    htmlFor="shippingPhone"
-                    className="mb-2 block text-sm font-medium text-[#17211D]"
-                  >
-                    Phone number
-                  </label>
 
                   <input
-                    id="shippingPhone"
                     name="shippingPhone"
-                    type="tel"
                     value={formData.shippingPhone}
                     onChange={handleChange}
-                    required
-                    placeholder="080..."
-                    className="w-full border border-[#DED8CC] bg-[#F7F3EC] px-4 py-3 text-sm text-[#17211D] outline-none transition focus:border-[#124C3B]"
+                    placeholder="Phone number"
+                    className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
                   />
-                </div>
 
-                {/* Country */}
-                <div>
-                  <label
-                    htmlFor="shippingCountry"
-                    className="mb-2 block text-sm font-medium text-[#17211D]"
-                  >
-                    Country
-                  </label>
+                  <textarea
+                    name="shippingAddress"
+                    value={formData.shippingAddress}
+                    onChange={handleChange}
+                    placeholder="Delivery address"
+                    rows="3"
+                    className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B] sm:col-span-2"
+                  />
 
                   <input
-                    id="shippingCountry"
+                    name="shippingCity"
+                    value={formData.shippingCity}
+                    onChange={handleChange}
+                    placeholder="City"
+                    className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                  />
+
+                  <input
+                    name="shippingState"
+                    value={formData.shippingState}
+                    onChange={handleChange}
+                    placeholder="State"
+                    className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                  />
+
+                  <input
                     name="shippingCountry"
-                    type="text"
                     value={formData.shippingCountry}
                     onChange={handleChange}
-                    required
-                    className="w-full border border-[#DED8CC] bg-[#F7F3EC] px-4 py-3 text-sm text-[#17211D] outline-none transition focus:border-[#124C3B]"
+                    placeholder="Country"
+                    className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
                   />
-                </div>
-
-                {/* Delivery location */}
-                <div className="sm:col-span-2">
-                  <label
-                    htmlFor="shippingLocationId"
-                    className="mb-2 block text-sm font-medium text-[#17211D]"
-                  >
-                    Delivery location
-                  </label>
 
                   <select
-                    id="shippingLocationId"
-                    name="shippingLocationId"
                     value={shippingLocationId}
-                    onChange={handleShippingLocationChange}
-                    required
-                    disabled={shippingLocations.length === 0}
-                    className="w-full border border-[#DED8CC] bg-[#F7F3EC] px-4 py-3 text-sm text-[#17211D] outline-none transition focus:border-[#124C3B] disabled:cursor-not-allowed disabled:opacity-60"
+                    onChange={(event) => {
+                      setShippingLocationId(
+                        event.target.value
+                      );
+                      setError("");
+                    }}
+                    className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
                   >
                     <option value="">
-                      {shippingLocations.length > 0
-                        ? "Select your delivery location"
-                        : "No delivery locations available"}
+                      Select delivery location
                     </option>
 
                     {shippingLocations.map((location) => (
@@ -348,85 +549,22 @@ const Checkout = () => {
                     ))}
                   </select>
                 </div>
+              </section>
+            </div>
 
-                {/* Delivery address */}
-                <div className="sm:col-span-2">
-                  <label
-                    htmlFor="shippingAddress"
-                    className="mb-2 block text-sm font-medium text-[#17211D]"
-                  >
-                    Delivery address
-                  </label>
-
-                  <textarea
-                    id="shippingAddress"
-                    name="shippingAddress"
-                    value={formData.shippingAddress}
-                    onChange={handleChange}
-                    required
-                    rows="4"
-                    placeholder="House number, street, area..."
-                    className="w-full resize-none border border-[#DED8CC] bg-[#F7F3EC] px-4 py-3 text-sm text-[#17211D] outline-none transition focus:border-[#124C3B]"
-                  />
-                </div>
-
-                {/* City */}
-                <div>
-                  <label
-                    htmlFor="shippingCity"
-                    className="mb-2 block text-sm font-medium text-[#17211D]"
-                  >
-                    City
-                  </label>
-
-                  <input
-                    id="shippingCity"
-                    name="shippingCity"
-                    type="text"
-                    value={formData.shippingCity}
-                    onChange={handleChange}
-                    required
-                    placeholder="Abeokuta"
-                    className="w-full border border-[#DED8CC] bg-[#F7F3EC] px-4 py-3 text-sm text-[#17211D] outline-none transition focus:border-[#124C3B]"
-                  />
-                </div>
-
-                {/* State */}
-                <div>
-                  <label
-                    htmlFor="shippingState"
-                    className="mb-2 block text-sm font-medium text-[#17211D]"
-                  >
-                    State
-                  </label>
-
-                  <input
-                    id="shippingState"
-                    name="shippingState"
-                    type="text"
-                    value={formData.shippingState}
-                    onChange={handleChange}
-                    required
-                    placeholder="Ogun"
-                    className="w-full border border-[#DED8CC] bg-[#F7F3EC] px-4 py-3 text-sm text-[#17211D] outline-none transition focus:border-[#124C3B]"
-                  />
-                </div>
-              </div>
-            </section>
-
-            {/* Order summary */}
+            {/* RIGHT */}
             <aside className="h-fit border border-[#DED8CC] bg-[#FFFDF8] p-5 sm:p-7 lg:sticky lg:top-6">
               <h2 className="text-2xl text-[#124C3B]">
-                Your order
+                Order summary
               </h2>
 
-              <div className="mt-6 divide-y divide-[#DED8CC]">
+              <div className="mt-6 space-y-5">
                 {items.map((item) => (
                   <div
                     key={item.id}
-                    className="flex gap-4 py-4 first:pt-0"
+                    className="flex gap-4"
                   >
-                    <div className="h-20 w-14 shrink-0 overflow-hidden bg-[#F0F1F2]">
+                    <div className="h-20 w-14 shrink-0 overflow-hidden bg-[#F7F3EC]">
                       {item.book.coverImage ? (
                         <img
                           src={item.book.coverImage}
@@ -434,14 +572,14 @@ const Checkout = () => {
                           className="h-full w-full object-cover"
                         />
                       ) : (
-                        <div className="flex h-full items-center justify-center px-1 text-center text-[10px] text-[#6F756F]">
+                        <div className="flex h-full items-center justify-center text-[10px] text-[#6F756F]">
                           No cover
                         </div>
                       )}
                     </div>
 
                     <div className="min-w-0 flex-1">
-                      <h3 className="truncate text-sm font-medium text-[#17211D]">
+                      <h3 className="truncate text-sm font-medium">
                         {item.book.title}
                       </h3>
 
@@ -449,7 +587,7 @@ const Checkout = () => {
                         Qty: {item.quantity}
                       </p>
 
-                      <p className="mt-2 text-sm font-semibold text-[#17211D]">
+                      <p className="mt-2 text-sm font-semibold">
                         ₦
                         {(
                           Number(item.book.price) *
@@ -461,71 +599,61 @@ const Checkout = () => {
                 ))}
               </div>
 
-              {/* Totals */}
-              <div className="mt-5 border-t border-[#DED8CC] pt-5">
-                {/* Subtotal */}
-                <div className="flex items-center justify-between text-sm">
+              <div className="mt-6 border-t border-[#DED8CC] pt-5">
+                <div className="flex justify-between text-sm">
                   <span className="text-[#6F756F]">
                     Subtotal
                   </span>
-
-                  <span className="font-medium text-[#17211D]">
+                  <span>
                     ₦{subtotal.toLocaleString()}
                   </span>
                 </div>
 
-                {/* Shipping */}
-                <div className="mt-3 flex items-center justify-between text-sm">
+                <div className="mt-3 flex justify-between text-sm">
                   <span className="text-[#6F756F]">
                     Shipping
                   </span>
-
-                  <span className="font-medium text-[#17211D]">
-                    {selectedShippingLocation
+                  <span>
+                    {selectedLocation
                       ? `₦${shippingFee.toLocaleString()}`
                       : "Select location"}
                   </span>
                 </div>
 
-                {/* Total */}
-                <div className="mt-5 flex items-center justify-between border-t border-[#DED8CC] pt-5">
-                  <span className="font-medium text-[#17211D]">
+                <div className="mt-5 flex justify-between border-t border-[#DED8CC] pt-5">
+                  <span className="font-medium">
                     Total
                   </span>
-
                   <span className="text-xl font-semibold text-[#124C3B]">
                     ₦{total.toLocaleString()}
                   </span>
                 </div>
               </div>
 
-              {/* Error */}
               {error && (
-                <p className="mt-5 text-sm leading-5 text-red-600">
+                <p className="mt-5 text-sm text-red-600">
                   {error}
                 </p>
               )}
 
-              {/* Place order */}
               <button
                 type="submit"
                 disabled={
                   placingOrder ||
                   !shippingLocationId ||
-                  shippingLocations.length === 0
+                  items.length === 0
                 }
-                className="mt-6 flex h-12 w-full items-center justify-center gap-2 bg-[#124C3B] px-6 text-sm font-medium text-white transition hover:bg-[#0D3D30] disabled:cursor-not-allowed disabled:bg-[#9AA19C]"
+                className="mt-6 flex h-12 w-full items-center justify-center gap-2 bg-[#124C3B] text-sm font-medium text-white hover:bg-[#0D3D30] disabled:cursor-not-allowed disabled:bg-[#9AA19C]"
               >
                 <Lock size={17} />
 
                 {placingOrder
-                  ? "Placing order..."
-                  : "Place order"}
+                  ? "Creating order..."
+                  : "Continue to payment"}
               </button>
 
-              <p className="mt-4 text-center text-xs leading-5 text-[#6F756F]">
-                Your shipping fee is calculated from your
-                selected delivery location.
+              <p className="mt-4 text-center text-xs text-[#6F756F]">
+                Payment will be handled on the next step.
               </p>
             </aside>
           </div>
