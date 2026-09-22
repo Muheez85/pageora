@@ -87,7 +87,7 @@ const Books = () => {
 
   return (
     <main className="bg-[#F7F3EC]  ">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto py-15 px-6">
 
         {/* Heading */}
         <div className="mb-12">
