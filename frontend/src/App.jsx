@@ -7,11 +7,11 @@ import Home from "./pages/Home";
 import Books from "./pages/Books";
 import BookDetails from "./pages/BookDetails";
 import Login from "./pages/Login";
-import SignUp from "./pages/Signup";
+import SignUp from "./pages/SignUp";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
-import OrderDetails from "./pages/orderDetails";
-import Payment from "./pages/payment";
+import OrderDetails from "./pages/OrderDetails";
+import Payment from "./pages/Payment"; 
 import Account from "./pages/Account";
 import Profile from "./pages/Profile";
 import Addresses from "./pages/Addresses";
@@ -63,27 +63,15 @@ const App = () => {
           {/* Account */}
           <Route path="/account" element={<Account />} />
 
-          <Route
-            path="/account/profile"
-            element={<Profile />}
-          />
+          <Route path="/account/profile" element={<Profile />}/>
 
-          <Route
-            path="/account/addresses"
-            element={<Addresses />}
-          />
+          <Route path="/account/addresses" element={<Addresses />} />
 
-          <Route
-            path="/account/settings"
-            element={<Settings />}
-          />
+          <Route  path="/account/settings" element={<Settings />}/>
 
           {/* Admin */}
           <Route element={<AdminRoute />}>
-            <Route
-              path="/admin/*"
-              element={<Admin />}
-            />
+            <Route path="/admin/*" element={<Admin />}/>
           </Route>
         </Routes>
       </main>
