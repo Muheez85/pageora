@@ -12,6 +12,17 @@
   --pageora-border: #DED8CC;
 }
 
+/* Pageora colors for Tailwind */
+@theme {
+  --color-pageora-green: var(--pageora-green);
+  --color-pageora-orange: var(--pageora-orange);
+  --color-pageora-background: var(--pageora-background);
+  --color-pageora-surface: var(--pageora-surface);
+  --color-pageora-text: var(--pageora-text);
+  --color-pageora-muted: var(--pageora-muted);
+  --color-pageora-border: var(--pageora-border);
+}
+
 * {
   box-sizing: border-box;
 }

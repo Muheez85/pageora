@@ -73,8 +73,8 @@ const AdminSidebar = ({ isOpen, onClose }) => {
     <aside
       className={`
         fixed left-0 top-0 z-50 h-screen w-72
-        border-r border-var(--pageora-border)
-        bg-var(--pageora-surface)
+        border-r border-pageora-border
+        bg-pageora-surface
         transition-transform duration-300 ease-in-out
 
         lg:z-40
@@ -90,23 +90,24 @@ const AdminSidebar = ({ isOpen, onClose }) => {
       `}
     >
       <div className="flex h-full flex-col p-5 sm:p-6">
-        {/* MOBILE CLOSE BUTTON */}
+        {/* BRAND */}
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-3xl text-var(--pageora-green)">
+            <h1 className="text-3xl text-pageora-green">
               Pageora
             </h1>
 
-            <p className="mt-1 text-xs text-var(--pageora-muted)">
+            <p className="mt-1 text-xs text-pageora-muted">
               Admin Panel
             </p>
           </div>
 
+          {/* MOBILE CLOSE BUTTON */}
           <button
             type="button"
             onClick={onClose}
             aria-label="Close admin menu"
-            className="flex h-9 w-9 items-center justify-center rounded-3xl text-var(--pageora-muted) transition hover:bg-[var(--pageora-background)  hover:text-var(--pageora-text) hover:rounded-3xl lg:hidden"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-pageora-muted transition hover:bg-pageora-background hover:text-pageora-text lg:hidden"
           >
             <X size={21} />
           </button>
@@ -125,8 +126,8 @@ const AdminSidebar = ({ isOpen, onClose }) => {
                 className={({ isActive }) =>
                   `flex items-center gap-3 rounded-lg px-4 py-3 text-sm transition-colors ${
                     isActive
-                      ? "bg-var(--pageora-green) text-white"
-                      : "text-var(--pageora-muted) hover:bg-var(--pageora-background) hover:text-var(--pageora-text)"
+                      ? "bg-pageora-green text-white"
+                      : "text-pageora-muted hover:bg-pageora-background hover:text-pageora-text"
                   }`
                 }
               >
@@ -138,36 +139,36 @@ const AdminSidebar = ({ isOpen, onClose }) => {
         </nav>
 
         {/* STORE LINKS */}
-        <div className="mt-auto space-y-1 border-t border-var(--pageora-border) pt-4">
-          <p className="mb-2 px-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-var(--pageora-muted)">
+        <div className="mt-auto space-y-1 border-t border-pageora-border pt-4">
+          <p className="mb-2 px-4 text-[10px] font-semibold uppercase tracking-[0.16em] text-pageora-muted">
             Store
           </p>
 
-          {/* Back to Store */}
+          {/* BACK TO STORE */}
           <Link
             to="/"
             onClick={onClose}
-            className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-var(--pageora-muted) transition-colors hover:bg-[var(--pageora-background) hover:text-var(--pageora-text)"
+            className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-pageora-muted transition-colors hover:bg-pageora-background hover:text-pageora-text"
           >
             <Store size={18} />
             Back to Store
           </Link>
 
-          {/* My Account */}
+          {/* MY ACCOUNT */}
           <Link
             to="/account"
             onClick={onClose}
-            className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-var(--pageora-muted) transition-colors hover:bg-var(--pageora-background) hover:text-var(--pageora-text)"
+            className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-pageora-muted transition-colors hover:bg-pageora-background hover:text-pageora-text"
           >
             <UserCircle size={18} />
             My Account
           </Link>
 
-          {/* Sign Out */}
+          {/* SIGN OUT */}
           <button
             type="button"
             onClick={logout}
-            className="flex w-full items-center gap-3 rounded-3xl px-4 py-3 text-sm text-red-600 transition-colors hover:bg-red-50"
+            className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm text-red-600 transition-colors hover:bg-red-50"
           >
             <LogOut size={18} />
             Sign out

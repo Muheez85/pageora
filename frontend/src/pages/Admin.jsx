@@ -22,7 +22,7 @@ const Admin = () => {
         <Route path="*" element={
             <Navigate to="/admin/dashboard" replace/>}/>
         <Route path="books" element={<AdminBooks />} />
-        <Route path="books/add" element={<AdminAddBook />}/>
+        <Route path="books/new" element={<AdminAddBook />}/>
         <Route path="books/edit/:id" element={<AdminEditBook />}/>
         <Route path="categories" element={<AdminCategories />}/>
         <Route path="authors" element={<AdminAuthors />}/>

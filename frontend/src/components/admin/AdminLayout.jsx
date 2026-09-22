@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 
 import AdminSidebar from "./AdminSidebar";
 
@@ -35,15 +35,15 @@ const AdminLayout = ({ children }) => {
   }, [sidebarOpen]);
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-var(--pageora-background)">
+    <div className="min-h-screen overflow-x-hidden bg-pageora-background">
       {/* MOBILE HEADER */}
-      <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-var(--pageora-border) bg-[var--pageora-surface) px-4 lg:hidden">
+      <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-pageora-border bg-pageora-surface px-4 lg:hidden">
         <div>
-          <h1 className="text-2xl font-semibold text-var(--pageora-green)">
+          <h1 className="text-2xl font-semibold text-pageora-green">
             Pageora
           </h1>
 
-          <p className="text-[11px] text-var(--pageora-muted)">
+          <p className="text-[11px] text-pageora-muted">
             Admin Panel
           </p>
         </div>
@@ -52,7 +52,7 @@ const AdminLayout = ({ children }) => {
           type="button"
           onClick={() => setSidebarOpen(true)}
           aria-label="Open admin menu"
-          className="flex h-10 w-10 items-center justify-center rounded-3xl text-var(--pageora-text) transition hover:bg-[var(--pageora-background)"
+          className="flex h-10 w-10 items-center justify-center rounded-lg text-pageora-text transition hover:bg-pageora-background"
         >
           <Menu size={24} />
         </button>

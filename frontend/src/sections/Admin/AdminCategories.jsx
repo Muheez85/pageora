@@ -33,7 +33,6 @@ const AdminCategories = () => {
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
 
- l // load categories 
   const loadCategories = async () => {
     try {
       setLoading(true);
@@ -58,16 +57,12 @@ const AdminCategories = () => {
     loadCategories();
   }, []);
 
-// search
-
   const filteredCategories = categories.filter((category) =>
     category.name
-      .toLowerCase()
+      ?.toLowerCase()
       .includes(search.toLowerCase())
   );
 
-  
-  // open add form
   const handleOpenAdd = () => {
     setEditingCategory(null);
 
@@ -83,8 +78,6 @@ const AdminCategories = () => {
 
     setShowForm(true);
   };
-
-  // open edit form
 
   const handleOpenEdit = (category) => {
     setEditingCategory(category);
@@ -102,8 +95,6 @@ const AdminCategories = () => {
     setShowForm(true);
   };
 
-  // close form
-
   const handleCloseForm = () => {
     setShowForm(false);
     setEditingCategory(null);
@@ -118,15 +109,13 @@ const AdminCategories = () => {
     setError("");
   };
 
-  // form input 
   const handleChange = (event) => {
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [event.target.name]: event.target.value,
-    });
+    }));
   };
 
-//  image set 
   const handleImageChange = (event) => {
     const file = event.target.files?.[0];
 
@@ -138,10 +127,6 @@ const AdminCategories = () => {
 
     setImagePreview(previewUrl);
   };
-
-  // ---------------------------------------
-  // SUBMIT FORM
-  // ---------------------------------------
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -157,7 +142,7 @@ const AdminCategories = () => {
 
       const data = new FormData();
 
-      data.append("name", formData.name);
+      data.append("name", formData.name.trim());
 
       if (image) {
         data.append("image", image);
@@ -204,10 +189,6 @@ const AdminCategories = () => {
     }
   };
 
-  // ---------------------------------------
-  // DELETE CATEGORY
-  // ---------------------------------------
-
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this category?"
@@ -244,19 +225,18 @@ const AdminCategories = () => {
 
   return (
     <section>
-      {/* HEADER */}
-
+      {/* Header */}
       <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-medium text-var(--pageora-orange)">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-pageora-orange">
             Catalog
           </p>
 
-          <h1 className="mt-1 text-4xl text-var(--pageora-green)">
+          <h1 className="mt-2 text-4xl text-pageora-green">
             Categories
           </h1>
 
-          <p className="mt-2 text-sm text-var(--pageora-muted)">
+          <p className="mt-2 max-w-xl text-sm leading-6 text-pageora-muted">
             Organize your bookstore and manage book categories.
           </p>
         </div>
@@ -264,28 +244,26 @@ const AdminCategories = () => {
         <button
           type="button"
           onClick={handleOpenAdd}
-          className="inline-flex items-center justify-center gap-2 bg-var(--pageora-green) rounded-3xl px-5 py-3 text-sm font-medium text-white"
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-pageora-green px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0e3f31] hover:shadow-sm"
         >
           <Plus size={18} />
           Add category
         </button>
       </div>
 
-      {/* SUCCESS */}
-
+      {/* Success */}
       {success && (
-        <div className="mt-6 border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+        <div className="mt-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
           {success}
         </div>
       )}
 
-      {/* SEARCH */}
-
+      {/* Search */}
       <div className="mt-8">
-        <div className="relative max-w-md">
+        <div className="relative max-w-lg">
           <Search
             size={18}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-var(--pageora-muted)"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-pageora-muted"
           />
 
           <input
@@ -295,182 +273,186 @@ const AdminCategories = () => {
             onChange={(event) =>
               setSearch(event.target.value)
             }
-            className="w-full border border-var(--pageora-border) rounded-3xl bg-var(--pageora-surface) py-3 pl-11 pr-4 text-sm outline-none focus:border-var(--pageora-green)"
+            className="w-full rounded-lg border border-pageora-border bg-pageora-surface py-3 pl-11 pr-4 text-sm text-pageora-text outline-none transition placeholder:text-pageora-muted focus:border-pageora-green focus:ring-2 focus:ring-pageora-green/10"
           />
         </div>
       </div>
 
-      {/* ERROR */}
-
+      {/* Error */}
       {error && !showForm && (
-        <div className="mt-6 border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <div className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}
         </div>
       )}
 
-      {/* LOADING */}
-
+      {/* Loading */}
       {loading && (
-        <div className="mt-8">
-          <p className="text-sm text-var(--pageora-muted)">
+        <div className="mt-8 rounded-2xl border border-pageora-border bg-pageora-surface p-10 text-center">
+          <p className="text-sm text-pageora-muted">
             Loading categories...
           </p>
         </div>
       )}
 
-      {/* EMPTY */}
-
+      {/* Empty */}
       {!loading &&
         !error &&
         filteredCategories.length === 0 && (
-          <div className="mt-8 border border-var(--pageora-border) bg-var(--pageora-surface) p-10 text-center">
-            <p className="text-sm text-var(--pageora-muted)">
+          <div className="mt-8 rounded-2xl border border-pageora-border bg-pageora-surface p-10 text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-pageora-background text-pageora-green">
+              <Plus size={22} />
+            </div>
+
+            <h2 className="mt-4 text-xl text-pageora-text">
               {search
-                ? "No categories match your search."
-                : "No categories found."}
+                ? "No categories found"
+                : "No categories yet"}
+            </h2>
+
+            <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-pageora-muted">
+              {search
+                ? "Try a different search term."
+                : "Add your first category to start organizing your books."}
             </p>
 
             {!search && (
               <button
                 type="button"
                 onClick={handleOpenAdd}
-                className="mt-4 text-sm font-medium  rounded-3xl text-var(--pageora-green) hover:underline"
+                className="mt-5 inline-flex items-center gap-2 rounded-lg bg-pageora-green px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0e3f31]"
               >
-                Add your first category
+                <Plus size={17} />
+                Add category
               </button>
             )}
           </div>
         )}
 
-      {/* CATEGORY TABLE */}
-
+      {/* Category Table */}
       {!loading &&
+        !error &&
         filteredCategories.length > 0 && (
-          <div className="mt-8 overflow-x-auto border border-var(--pageora-border) bg-var(--pageora-surface)">
-            <table className="w-full min-w-175 text-left">
-              <thead className="border-b border-var(--pageora-border)">
-                <tr>
-                  <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-var(--pageora-muted)">
-                    Category
-                  </th>
+          <div className="mt-8 overflow-hidden rounded-2xl border border-pageora-border bg-pageora-surface">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[800px] text-left">
+                <thead className="border-b border-pageora-border bg-pageora-background/50">
+                  <tr>
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-pageora-muted">
+                      Category
+                    </th>
 
-                  <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-var(--pageora-muted)">
-                    Slug
-                  </th>
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-pageora-muted">
+                      Slug
+                    </th>
 
-                  <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-var(--pageora-muted)">
-                    Books
-                  </th>
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-pageora-muted">
+                      Books
+                    </th>
 
-                  <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-var(--pageora-muted)">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {filteredCategories.map((category) => (
-                  <tr
-                    key={category.id}
-                    className="border-b border-var(--pageora-border) last:border-b-0"
-                  >
-                    {/* CATEGORY */}
-
-                    <td className="px-5 py-5">
-                      <div className="flex items-center gap-4">
-                        <div className="h-14 w-14 shrink-0 overflow-hidden bg-var(--pageora-background)">
-                          {category.image ? (
-                            <img
-                              src={category.image}
-                              alt={category.name}
-                              className="h-full w-full object-cover"
-                            />
-                          ) : (
-                            <div className="flex h-full items-center justify-center text-[10px] text-var(--pageora-muted)">
-                              No image
-                            </div>
-                          )}
-                        </div>
-
-                        <div>
-                          <p className="font-medium text-var(--pageora-text)">
-                            {category.name}
-                          </p>
-
-                          <p className="mt-1 text-xs text-var(--pageora-muted)">
-                            Category #{category.id}
-                          </p>
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* SLUG */}
-
-                    <td className="px-5 py-5 text-sm text-var(--pageora-muted)">
-                      {category.slug}
-                    </td>
-
-                    {/* BOOK COUNT */}
-
-                    <td className="px-5 py-5">
-                      <span className="text-sm font-medium text-var(--pageora-text)">
-                        {category._count?.books || 0}{" "}
-                        {category._count?.books === 1
-                          ? "book"
-                          : "books"}
-                      </span>
-                    </td>
-
-                    {/* ACTIONS */}
-
-                    <td className="px-5 py-5">
-                      <div className="flex items-center gap-4">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleOpenEdit(category)
-                          }
-                          className="inline-flex items-center gap-1.5 text-sm font-medium text-var(--pageora-green) rounded-3xl hover:underline"
-                        >
-                          <Pencil size={15} />
-                          Edit
-                        </button>
-
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleDelete(category.id)
-                          }
-                          className="inline-flex items-center gap-1.5  rounded-3xltext-sm font-medium text-red-600 hover:underline"
-                        >
-                          <Trash2 size={15} />
-                          Delete
-                        </button>
-                      </div>
-                    </td>
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-pageora-muted">
+                      Actions
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+
+                <tbody>
+                  {filteredCategories.map((category) => (
+                    <tr
+                      key={category.id}
+                      className="border-b border-pageora-border last:border-b-0 transition hover:bg-pageora-background/40"
+                    >
+                      {/* Category */}
+                      <td className="px-5 py-5">
+                        <div className="flex items-center gap-4">
+                          <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-pageora-background">
+                            {category.image ? (
+                              <img
+                                src={category.image}
+                                alt={category.name}
+                                className="h-full w-full object-cover"
+                              />
+                            ) : (
+                              <div className="flex h-full items-center justify-center px-1 text-center text-[10px] text-pageora-muted">
+                                No image
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="min-w-0">
+                            <p className="font-medium text-pageora-text">
+                              {category.name}
+                            </p>
+
+                            <p className="mt-1 text-xs text-pageora-muted">
+                              Category #{category.id}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+
+                      {/* Slug */}
+                      <td className="px-5 py-5 text-sm text-pageora-muted">
+                        {category.slug}
+                      </td>
+
+                      {/* Books */}
+                      <td className="px-5 py-5">
+                        <span className="text-sm font-medium text-pageora-text">
+                          {category._count?.books || 0}{" "}
+                          {category._count?.books === 1
+                            ? "book"
+                            : "books"}
+                        </span>
+                      </td>
+
+                      {/* Actions */}
+                      <td className="px-5 py-5">
+                        <div className="flex items-center gap-4">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleOpenEdit(category)
+                            }
+                            className="inline-flex items-center gap-1.5 text-sm font-medium text-pageora-green transition hover:opacity-70"
+                          >
+                            <Pencil size={15} />
+                            Edit
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleDelete(category.id)
+                            }
+                            className="inline-flex items-center gap-1.5 text-sm font-medium text-red-600 transition hover:opacity-70"
+                          >
+                            <Trash2 size={15} />
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 
-      {/* ADD / EDIT MODAL */}
-
+      {/* Add / Edit Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-6">
-          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto bg-var(--pageora-surface)">
-            {/* MODAL HEADER */}
-
-            <div className="flex items-center justify-between border-b border-var(--pageora-border) px-6 py-5">
+          <div className="w-full max-w-lg overflow-hidden rounded-2xl border border-pageora-border bg-pageora-surface shadow-2xl">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-pageora-border px-6 py-5">
               <div>
-                <p className="text-sm font-medium text-var(--pageora-orange)">
+                <p className="text-sm font-semibold uppercase tracking-[0.14em] text-pageora-orange">
                   {editingCategory
                     ? "Edit category"
                     : "New category"}
                 </p>
 
-                <h2 className="mt-1 text-2xl text-var(--pageora-green)">
+                <h2 className="mt-1 text-2xl text-pageora-green">
                   {editingCategory
                     ? "Update category"
                     : "Add category"}
@@ -480,109 +462,120 @@ const AdminCategories = () => {
               <button
                 type="button"
                 onClick={handleCloseForm}
-                className="text-var(--pageora-muted)  rounded-3xl hover:text-var(--pageora-text)"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-pageora-muted transition hover:bg-pageora-background hover:text-pageora-text"
+                aria-label="Close"
               >
-                <X size={21} />
+                <X size={20} />
               </button>
             </div>
 
-            {/* FORM */}
-
+            {/* Form */}
             <form
               onSubmit={handleSubmit}
               className="space-y-6 p-6"
             >
-              {/* ERROR */}
-
+              {/* Form Error */}
               {error && (
-                <div className="border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
                   {error}
                 </div>
               )}
 
-              {/* NAME */}
-
+              {/* Name */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-var(--pageora-text)">
+                <label
+                  htmlFor="category-name"
+                  className="mb-2 block text-sm font-medium text-pageora-text"
+                >
                   Category name
                 </label>
 
                 <input
+                  id="category-name"
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="e.g. Fiction"
                   required
-                  className="w-full border border-var(--pageora-border) bg-white px-4 py-3 text-sm rounded-3xl outline-none focus:border-var(--pageora-green)"
+                  className="w-full rounded-lg border border-pageora-border bg-pageora-background px-4 py-3 text-sm text-pageora-text outline-none transition placeholder:text-pageora-muted focus:border-pageora-green focus:ring-2 focus:ring-pageora-green/10"
                 />
 
-                <p className="mt-2 text-xs text-var(--pageora-muted)">
+                <p className="mt-2 text-xs text-pageora-muted">
                   The category slug will be generated automatically.
                 </p>
               </div>
 
-              {/* IMAGE */}
-
+              {/* Image */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-var(--pageora-text)">
+                <label className="mb-2 block text-sm font-medium text-pageora-text">
                   Category image
                 </label>
 
-                <label className="flex min-h-48 cursor-pointer flex-col items-center justify-center border border-dashed border-var(--pageora-border) bg-var(--pageora-background) px-5 py-6 text-center">
+                <label
+                  htmlFor="category-image"
+                  className="block cursor-pointer"
+                >
                   {imagePreview ? (
-                    <img
-                      src={imagePreview}
-                      alt="Category preview"
-                      className="h-44 w-full object-cover"
-                    />
-                  ) : (
-                    <>
-                      <ImagePlus
-                        size={30}
-                        className="text-var(--pageora-muted)"
+                    <div className="relative overflow-hidden rounded-xl border border-pageora-border bg-pageora-background">
+                      <img
+                        src={imagePreview}
+                        alt="Category preview"
+                        className="h-52 w-full object-cover"
                       />
 
-                      <p className="mt-3 text-sm font-medium text-var(--pageora-text)">
+                      <div className="absolute inset-x-0 bottom-0 bg-black/50 px-4 py-3 text-center text-xs font-medium text-white">
+                        Click to replace image
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex min-h-52 flex-col items-center justify-center rounded-xl border border-dashed border-pageora-border bg-pageora-background px-5 py-8 text-center transition hover:border-pageora-green">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-pageora-surface text-pageora-green">
+                        <ImagePlus size={24} />
+                      </div>
+
+                      <p className="mt-4 text-sm font-medium text-pageora-text">
                         Choose an image
                       </p>
 
-                      <p className="mt-1 text-xs text-var(--pageora-muted)">
+                      <p className="mt-1 text-xs text-pageora-muted">
                         JPG, PNG or WEBP
                       </p>
-                    </>
+                    </div>
                   )}
 
                   <input
+                    id="category-image"
                     type="file"
-                    accept="image/*"
+                    accept="image/png,image/jpeg,image/webp"
                     onChange={handleImageChange}
                     className="hidden"
                   />
                 </label>
 
                 {imagePreview && (
-                  <p className="mt-2 text-xs text-var(--pageora-muted)">
+                  <p className="mt-2 text-xs text-pageora-muted">
                     Select another image to replace the current one.
                   </p>
                 )}
               </div>
 
-              {/* BUTTONS */}
-
-              <div className="flex flex-col-reverse gap-3 border-t border-var(--pageora-border) pt-5 sm:flex-row sm:justify-end">
+              {/* Buttons */}
+              <div className="flex flex-col-reverse gap-3 border-t border-pageora-border pt-5 sm:flex-row sm:justify-end">
                 <button
                   type="button"
                   onClick={handleCloseForm}
-                  className="px-5 py-3 text-sm font-medium text-var(--pageora-muted) rounded-3xl  hover:text-var(--pageora-text)"
+                  className="rounded-lg border border-pageora-border px-5 py-3 text-sm font-medium text-pageora-text transition hover:bg-pageora-background"
                 >
                   Cancel
                 </button>
 
                 <button
                   type="submit"
-                  className=" rounded-3xl bg-var(--pageora-green) px-5 py-3 text-sm font-medium text-white"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-pageora-green px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0e3f31]"
                 >
+                  <Plus size={17} />
+
                   {editingCategory
                     ? "Save changes"
                     : "Create category"}

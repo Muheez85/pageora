@@ -1,12 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  ArrowLeft,
-  BookOpen,
-  Eye,
-  EyeOff,
-} from "lucide-react";
-
+import { ArrowLeft, BookOpen } from "lucide-react";
 import { loginUser } from "../services/authService";
 
 const Login = () => {
@@ -17,7 +11,6 @@ const Login = () => {
     password: "",
   });
 
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -37,17 +30,12 @@ const Login = () => {
     try {
       const data = await loginUser(formData);
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem(
-        "user",
-        JSON.stringify(data.user)
-      );
+      console.log("LOGIN SUCCESS:", data);
 
-      if (data.user.role === "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/");
-      }
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      navigate("/");
     } catch (error) {
       console.error("LOGIN ERROR:", error);
 
@@ -61,39 +49,36 @@ const Login = () => {
   };
 
   return (
-    <main className="min-h-screen bg-var(--pageora-background) flex items-center justify-center px-6 py-12">
-      <div className="w-full max-w-md">
+    <main className="min-h-screen bg-pageora-background px-5 py-8 sm:px-6 sm:py-12">
+      <div className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-md flex-col justify-center">
 
         {/* Back to home */}
         <Link
           to="/"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-var(--pageora-muted) transition hover:text-var(--pageora-green)"
+          className="mb-8 inline-flex w-fit items-center gap-2 text-sm text-pageora-muted transition-colors hover:text-pageora-green"
         >
           <ArrowLeft size={16} />
           Back to home
         </Link>
 
-        {/* Logo / Heading */}
+        {/* Header */}
         <div className="mb-8 text-center">
-          <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full bg-var(--pageora-green) text-white">
-            <BookOpen size={22} />
+          <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-pageora-green text-white shadow-sm">
+            <BookOpen size={22} strokeWidth={1.8} />
           </div>
 
-          <h1 className="mb-3 text-4xl text-var(--pageora-text)">
+          <h1 className="mb-3 text-4xl text-pageora-text">
             Welcome back
           </h1>
 
-          <p className="text-var(--pageora-muted)">
+          <p className="text-sm leading-6 text-pageora-muted">
             Sign in to continue your Pageora journey.
           </p>
         </div>
 
         {/* Login Card */}
-        <div className="border border-var(--pageora-border) bg-var(--pageora-surface) p-7 sm:p-8">
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-5"
-          >
+        <div className="border border-pageora-border bg-pageora-surface p-6 shadow-sm sm:p-8">
+          <form onSubmit={handleSubmit} className="space-y-5">
 
             {/* Error */}
             {error && (
@@ -106,7 +91,7 @@ const Login = () => {
             <div>
               <label
                 htmlFor="email"
-                className="mb-2 block text-sm font-medium"
+                className="mb-2 block text-sm font-medium text-pageora-text"
               >
                 Email address
               </label>
@@ -115,12 +100,11 @@ const Login = () => {
                 id="email"
                 name="email"
                 type="email"
-                required
-                autoComplete="email"
                 placeholder="you@example.com"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full rounded-3xl border border-var(--pageora-border) bg-white px-4 py-3 outline-none transition focus:border-var(--pageora-green)"
+                required
+                className="w-full rounded-lg border border-pageora-border bg-white px-4 py-3 text-sm text-pageora-text outline-none transition placeholder:text-pageora-muted focus:border-pageora-green focus:ring-2 focus:ring-pageora-green/10"
               />
             </div>
 
@@ -129,79 +113,56 @@ const Login = () => {
               <div className="mb-2 flex items-center justify-between">
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium"
+                  className="block text-sm font-medium text-pageora-text"
                 >
                   Password
                 </label>
 
                 <button
                   type="button"
-                  className="text-sm text-var(--pageora-green) hover:underline"
+                  className="text-sm text-pageora-green transition hover:underline"
                 >
                   Forgot password?
                 </button>
               </div>
 
-              <div className="relative">
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  required
-                  autoComplete="current-password"
-                  placeholder="Enter your password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="w-full rounded-3xl border border-var(--pageora-border) bg-white px-4 py-3 pr-12 outline-none transition focus:border-var(--pageora-green)"
-                />
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setShowPassword((current) => !current)
-                  }
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-var(--pageora-muted) transition hover:text-var(--pageora-green)"
-                  aria-label={
-                    showPassword
-                      ? "Hide password"
-                      : "Show password"
-                  }
-                >
-                  {showPassword ? (
-                    <EyeOff size={18} />
-                  ) : (
-                    <Eye size={18} />
-                  )}
-                </button>
-              </div>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+                className="w-full rounded-lg border border-pageora-border bg-white px-4 py-3 text-sm text-pageora-text outline-none transition placeholder:text-pageora-muted focus:border-pageora-green focus:ring-2 focus:ring-pageora-green/10"
+              />
             </div>
 
             {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-3xl bg-var(--pageora-green) py-3.5 font-medium text-white transition hover:bg-[#0d3d30] disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-lg bg-pageora-green py-3.5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-[#0e3f31] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 disabled:hover:shadow-none"
             >
               {loading ? "Signing in..." : "Sign in"}
             </button>
           </form>
 
-          {/* Sign Up */}
-          <p className="mt-7 text-center text-sm text-var(--pageora-muted)">
+          {/* Sign up */}
+          <p className="mt-7 text-center text-sm text-pageora-muted">
             Don't have an account?{" "}
             <Link
               to="/signup"
-              className="font-medium text-var(--pageora-green) hover:underline"
+              className="font-medium text-pageora-green transition hover:underline"
             >
               Create one
             </Link>
           </p>
         </div>
 
-        {/* Terms */}
-        <p className="mt-6 text-center text-xs text-var(--pageora-muted)">
-          By signing in, you agree to Pageora's terms and
-          privacy policy.
+        {/* Footer */}
+        <p className="mt-6 text-center text-xs leading-5 text-pageora-muted">
+          By signing in, you agree to Pageora's terms and privacy policy.
         </p>
       </div>
     </main>
