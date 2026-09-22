@@ -354,7 +354,7 @@ const Orders = () => {
                         {/* Order status */}
 
                         <span
-                          className={`px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] ${getOrderStatusClasses(
+                          className={`px-2.5 py-1 text-[10px] font-semibold uppercase tracking-0.1em ${getOrderStatusClasses(
                             orderStatus
                           )}`}
                         >
@@ -377,7 +377,7 @@ const Orders = () => {
 
                       <div className="text-left sm:text-right">
 
-                        <p className="text-xs uppercase tracking-[0.1em] text-[#6F756F]">
+                        <p className="text-xs uppercase tracking-0.1em text-[#6F756F]">
                           Total
                         </p>
 
@@ -399,9 +399,6 @@ const Orders = () => {
 
                   </div>
 
-                  {/* ===================================================== */}
-                  {/* ORDER META */}
-                  {/* ===================================================== */}
 
                   <div className="mt-5 grid gap-4 border-t border-[#DED8CC] pt-5 sm:grid-cols-2">
 
@@ -409,12 +406,12 @@ const Orders = () => {
 
                     <div>
 
-                      <p className="text-xs uppercase tracking-[0.1em] text-[#6F756F]">
+                      <p className="text-xs uppercase tracking-0.1em text-[#6F756F]">
                         Payment
                       </p>
 
                       <span
-                        className={`mt-2 inline-flex px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] ${getPaymentStatusClasses(
+                        className={`mt-2 inline-flex px-2.5 py-1 text-[10px] font-semibold uppercase tracking-0.1em ${getPaymentStatusClasses(
                           paymentStatus
                         )}`}
                       >
@@ -429,7 +426,7 @@ const Orders = () => {
 
                     <div className="sm:text-right">
 
-                      <p className="text-xs uppercase tracking-[0.1em] text-[#6F756F]">
+                      <p className="text-xs uppercase tracking-0.1em text-[#6F756F]">
                         Items
                       </p>
 

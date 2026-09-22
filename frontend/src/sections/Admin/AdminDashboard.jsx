@@ -47,7 +47,7 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center">
+      <div className="flex min-h-200 items-center justify-center">
         <Loader2
           size={30}
           className="animate-spin"
@@ -333,7 +333,7 @@ const AdminDashboard = () => {
                 No orders yet.
               </div>
             ) : (
-              <table className="w-full min-w-[650px]">
+              <table className="w-full min-w-162.5">
                 <thead>
                   <tr
                     className="border-b text-left text-xs uppercase tracking-wide"

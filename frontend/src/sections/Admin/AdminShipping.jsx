@@ -197,15 +197,15 @@ const AdminShipping = () => {
 
       <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-medium text-[var(--pageora-orange)]">
+          <p className="text-sm font-medium text-var(--pageora-orange)">
             Store
           </p>
 
-          <h1 className="mt-1 text-4xl text-[var(--pageora-green)]">
+          <h1 className="mt-1 text-4xl text-var(--pageora-green)">
             Shipping
           </h1>
 
-          <p className="mt-2 text-sm text-[var(--pageora-muted)]">
+          <p className="mt-2 text-sm text-var(--pageora-muted)">
             Manage delivery locations and shipping fees.
           </p>
         </div>
@@ -216,7 +216,7 @@ const AdminShipping = () => {
             resetForm();
             setFormOpen(true);
           }}
-          className="inline-flex items-center justify-center gap-2 bg-[var(--pageora-green)] px-5 py-3 text-sm font-medium text-white"
+          className="inline-flex items-center justify-center gap-2 bg-var(--pageora-green) px-5 py-3 text-sm font-medium text-white"
         >
           <Plus size={18} />
           Add location
@@ -234,8 +234,8 @@ const AdminShipping = () => {
       {/* Form */}
 
       {formOpen && (
-        <div className="mt-8 border border-[var(--pageora-border)] bg-[var(--pageora-surface)] p-6">
-          <h2 className="text-xl text-[var(--pageora-green)]">
+        <div className="mt-8 border border-var(--pageora-border) bg-var(--pageora-surface) p-6">
+          <h2 className="text-xl text-var(--pageora-green)">
             {editingLocation
               ? "Edit shipping location"
               : "Add shipping location"}
@@ -246,7 +246,7 @@ const AdminShipping = () => {
             className="mt-6 grid gap-5 md:grid-cols-2"
           >
             <div>
-              <label className="text-xs font-medium uppercase tracking-wide text-[var(--pageora-muted)]">
+              <label className="text-xs font-medium uppercase tracking-wide text-var(--pageora-muted)">
                 Location name
               </label>
 
@@ -257,12 +257,12 @@ const AdminShipping = () => {
                   setName(event.target.value)
                 }
                 placeholder="e.g. Lagos"
-                className="mt-2 w-full border border-[var(--pageora-border)] bg-[var(--pageora-surface)] px-4 py-3 text-sm outline-none focus:border-[var(--pageora-green)]"
+                className="mt-2 w-full border border-var(--pageora-border) bg-var(--pageora-surface) px-4 py-3 text-sm outline-none focus:border-var(--pageora-green)"
               />
             </div>
 
             <div>
-              <label className="text-xs font-medium uppercase tracking-wide text-[var(--pageora-muted)]">
+              <label className="text-xs font-medium uppercase tracking-wide text-var(--pageora-muted)">
                 Shipping fee
               </label>
 
@@ -274,7 +274,7 @@ const AdminShipping = () => {
                   setFee(event.target.value)
                 }
                 placeholder="2000"
-                className="mt-2 w-full border border-[var(--pageora-border)] bg-[var(--pageora-surface)] px-4 py-3 text-sm outline-none focus:border-[var(--pageora-green)]"
+                className="mt-2 w-full border border-var(--pageora-border) bg-var(--pageora-surface) px-4 py-3 text-sm outline-none focus:border-var(--pageora-green)"
               />
             </div>
 
@@ -282,7 +282,7 @@ const AdminShipping = () => {
               <button
                 type="submit"
                 disabled={saving}
-                className="bg-[var(--pageora-green)] px-5 py-3 text-sm font-medium text-white disabled:opacity-50"
+                className="bg-var(--pageora-green) px-5 py-3 text-sm font-medium text-white disabled:opacity-50"
               >
                 {saving
                   ? "Saving..."
@@ -294,7 +294,7 @@ const AdminShipping = () => {
               <button
                 type="button"
                 onClick={resetForm}
-                className="border border-[var(--pageora-border)] px-5 py-3 text-sm font-medium text-[var(--pageora-text)]"
+                className="border border-var(--pageora-border) px-5 py-3 text-sm font-medium text-var(--pageora-text)"
               >
                 Cancel
               </button>
@@ -307,20 +307,20 @@ const AdminShipping = () => {
 
       <div className="mt-8">
         {loading && (
-          <p className="text-sm text-[var(--pageora-muted)]">
+          <p className="text-sm text-var(--pageora-muted)">
             Loading shipping locations...
           </p>
         )}
 
         {!loading &&
           locations.length === 0 && (
-            <div className="border border-[var(--pageora-border)] bg-[var(--pageora-surface)] p-10 text-center">
+            <div className="border border-var(--pageora-border) bg-var(--pageora-surface) p-10 text-center">
               <Truck
                 size={32}
-                className="mx-auto text-[var(--pageora-muted)]"
+                className="mx-auto text-var(--pageora-muted)"
               />
 
-              <p className="mt-3 text-sm text-[var(--pageora-muted)]">
+              <p className="mt-3 text-sm text-var(--pageora-muted)">
                 No shipping locations yet.
               </p>
             </div>
@@ -328,23 +328,23 @@ const AdminShipping = () => {
 
         {!loading &&
           locations.length > 0 && (
-            <div className="overflow-x-auto border border-[var(--pageora-border)] bg-[var(--pageora-surface)]">
-              <table className="w-full min-w-[800px] text-left">
-                <thead className="border-b border-[var(--pageora-border)]">
+            <div className="overflow-x-auto border border-var(--pageora-border) bg-var(--pageora-surface)">
+              <table className="w-full min-w-800px text-left">
+                <thead className="border-b border-var(--pageora-border)">
                   <tr>
-                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-[var(--pageora-muted)]">
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-var(--pageora-muted)">
                       Location
                     </th>
 
-                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-[var(--pageora-muted)]">
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-var(--pageora-muted)">
                       Fee
                     </th>
 
-                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-[var(--pageora-muted)]">
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-var(--pageora-muted)">
                       Status
                     </th>
 
-                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-[var(--pageora-muted)]">
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-var(--pageora-muted)">
                       Actions
                     </th>
                   </tr>
@@ -355,15 +355,15 @@ const AdminShipping = () => {
                     (location) => (
                       <tr
                         key={location.id}
-                        className="border-b border-[var(--pageora-border)] last:border-b-0"
+                        className="border-b border-var(--pageora-border) last:border-b-0"
                       >
                         <td className="px-5 py-5">
-                          <p className="font-medium text-[var(--pageora-text)]">
+                          <p className="font-medium text-var(--pageora-text)">
                             {location.name}
                           </p>
                         </td>
 
-                        <td className="px-5 py-5 text-sm font-medium text-[var(--pageora-text)]">
+                        <td className="px-5 py-5 text-sm font-medium text-var(--pageora-text)">
                           ₦
                           {Number(
                             location.fee
@@ -399,7 +399,7 @@ const AdminShipping = () => {
                                   location
                                 )
                               }
-                              className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--pageora-green)] hover:underline"
+                              className="inline-flex items-center gap-1.5 text-sm font-medium text-var(--pageora-green) hover:underline"
                             >
                               <Pencil
                                 size={14}

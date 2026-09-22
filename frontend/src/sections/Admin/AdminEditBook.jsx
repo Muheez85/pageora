@@ -370,7 +370,7 @@ const AdminEditBook = () => {
               </h2>
 
               {!preview ? (
-                <label className="flex min-h-[320px] cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 px-6 text-center transition hover:border-gray-500 hover:bg-gray-50">
+                <label className="flex min-h-320px cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 px-6 text-center transition hover:border-gray-500 hover:bg-gray-50">
                   <Upload
                     size={32}
                     className="mb-4 text-gray-400"
@@ -396,7 +396,7 @@ const AdminEditBook = () => {
                   <img
                     src={preview}
                     alt="Book cover"
-                    className="h-[320px] w-full object-cover"
+                    className="h-320px w-full object-cover"
                   />
 
                   <button

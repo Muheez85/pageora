@@ -78,7 +78,7 @@ const SignUp = () => {
         </div>
 
         {/* Form */}
-        <div className="border border-[#DED8CC] bg-[#FFFDF8] p-7 sm:p-8">
+        <div className="border border-[#DED8CC] bg-[#FFFDF8] p-7 sm:p-8 rounded-3xl">
           <form onSubmit={handleSubmit} className="space-y-5">
 
             {/* Name */}

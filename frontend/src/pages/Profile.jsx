@@ -208,7 +208,7 @@ const Profile = () => {
                     className="mt-3 h-12 w-full border border-[#124C3B] bg-[#FFFDF8] px-4 text-sm text-[#17211D] outline-none"
                   />
                 ) : (
-                  <p className="mt-3 break-words text-base font-medium text-[#17211D]">
+                  <p className="mt-3 wrap-break-words text-base font-medium text-[#17211D]">
                     {formData.name}
                   </p>
                 )}

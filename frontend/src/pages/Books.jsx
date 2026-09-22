@@ -116,7 +116,7 @@ const Books = () => {
         </div>
 
         {/* Category Filter */}
-        <div className="mb-10 flex flex-wrap gap-3">
+        <div className="mb-10 flex flex-wrap gap-3 rounded-3xl">
           <button
             type="button"
             onClick={() => setSelectedCategory("all")}
@@ -146,7 +146,7 @@ const Books = () => {
         </div>
 
         {/* Results + Sorting */}
-        <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-10 flex  rounded-3xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-[#6F756F]">
             {sortedBooks.length}{" "}
             {sortedBooks.length === 1 ? "book" : "books"}

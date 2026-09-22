@@ -1,176 +1,176 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  ArrowLeft,
-  Minus,
-  Plus,
-  Trash2,
-} from "lucide-react";
+    import { useEffect, useState } from "react";
+    import { Link, useNavigate } from "react-router-dom";
+    import {
+      ArrowLeft,
+      Minus,
+      Plus,
+      Trash2,
+    } from "lucide-react";
 
-import {
-  getCart,
-  updateCartItem,
-  removeCartItem,
-} from "../services/cartService";
+    import {
+      getCart,
+      updateCartItem,
+      removeCartItem,
+    } from "../services/cartService";
 
-import useCartStore from "../store/cartStore";
+    import useCartStore from "../store/cartStore";
 
-const Cart = () => {
-  const navigate = useNavigate();
+    const Cart = () => {
+      const navigate = useNavigate();
 
-  const { fetchCart } = useCartStore();
+      const { fetchCart } = useCartStore();
 
-  const [cart, setCart] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [updatingItem, setUpdatingItem] = useState(null);
-  const [removingItem, setRemovingItem] = useState(null);
+      const [cart, setCart] = useState(null);
+      const [loading, setLoading] = useState(true);
+      const [error, setError] = useState("");
+      const [updatingItem, setUpdatingItem] = useState(null);
+      const [removingItem, setRemovingItem] = useState(null);
 
-  // Fetch cart
-  useEffect(() => {
-    const fetchUserCart = async () => {
-      const token = localStorage.getItem("token");
+      // Fetch cart
+      useEffect(() => {
+        const fetchUserCart = async () => {
+          const token = localStorage.getItem("token");
 
-      if (!token) {
-        navigate("/login");
-        return;
-      }
+          if (!token) {
+            navigate("/login");
+            return;
+          }
 
-      try {
-        setLoading(true);
-        setError("");
+          try {
+            setLoading(true);
+            setError("");
 
-        const data = await getCart();
+            const data = await getCart();
 
-        setCart(data);
-      } catch (error) {
-        console.error("FETCH CART ERROR:", error);
+            setCart(data);
+          } catch (error) {
+            console.error("FETCH CART ERROR:", error);
 
-        setError(
-          error.response?.data?.message ||
-            "We couldn't load your cart."
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
+            setError(
+              error.response?.data?.message ||
+                "We couldn't load your cart."
+            );
+          } finally {
+            setLoading(false);
+          }
+        };
 
-    fetchUserCart();
-  }, [navigate]);
+        fetchUserCart();
+      }, [navigate]);
 
-  // Update quantity
-  const handleQuantityChange = async (
-    itemId,
-    newQuantity
-  ) => {
-    if (newQuantity < 1) return;
-
-    try {
-      setUpdatingItem(itemId);
-
-      await updateCartItem(
+      // Update quantity
+      const handleQuantityChange = async (
         itemId,
         newQuantity
+      ) => {
+        if (newQuantity < 1) return;
+
+        try {
+          setUpdatingItem(itemId);
+
+          await updateCartItem(
+            itemId,
+            newQuantity
+          );
+
+          const latestCart = await getCart();
+
+          setCart(latestCart);
+
+          // Update global cart count
+          await fetchCart();
+        } catch (error) {
+          console.error("UPDATE CART ERROR:", error);
+
+          alert(
+            error.response?.data?.message ||
+              "Unable to update cart."
+          );
+        } finally {
+          setUpdatingItem(null);
+        }
+      };
+
+      // Remove item
+      const handleRemoveItem = async (itemId) => {
+        try {
+          setRemovingItem(itemId);
+
+          await removeCartItem(itemId);
+
+          const latestCart = await getCart();
+
+          setCart(latestCart);
+
+          // Update global cart count
+          await fetchCart();
+        } catch (error) {
+          console.error(
+            "REMOVE CART ITEM ERROR:",
+            error
+          );
+
+          alert(
+            error.response?.data?.message ||
+              "Unable to remove item from cart."
+          );
+        } finally {
+          setRemovingItem(null);
+        }
+      };
+
+      // Loading
+      if (loading) {
+        return (
+          <main className="min-h-[60vh] bg-[#F7F3EC] py-20">
+            <div className="container mx-auto px-6">
+              <p className="text-sm text-[#6F756F]">
+                Loading your cart...
+              </p>
+            </div>
+          </main>
+        );
+      }
+
+      // Error
+      if (error) {
+        return (
+          <main className="min-h-[60vh] bg-[#F7F3EC] py-20">
+            <div className="container mx-auto px-6">
+
+              <Link
+                to="/books"
+                className="inline-flex items-center gap-2 text-sm font-medium text-[#124C3B] transition hover:text-[#E86A2A]"
+              >
+                <ArrowLeft size={17} />
+                Continue shopping
+              </Link>
+
+              <div className="py-20 text-center">
+                <h1 className="font-serif text-4xl text-[#124C3B]">
+                  Something went wrong.
+                </h1>
+
+                <p className="mt-3 text-[#6F756F]">
+                  {error}
+                </p>
+              </div>
+
+            </div>
+          </main>
+        );
+      }
+
+      const items = cart?.items || [];
+
+      // Calculate subtotal
+      const subtotal = items.reduce(
+        (total, item) =>
+          total +
+          Number(item.book.price) *
+            item.quantity,
+        0
       );
-
-      const latestCart = await getCart();
-
-      setCart(latestCart);
-
-      // Update global cart count
-      await fetchCart();
-    } catch (error) {
-      console.error("UPDATE CART ERROR:", error);
-
-      alert(
-        error.response?.data?.message ||
-          "Unable to update cart."
-      );
-    } finally {
-      setUpdatingItem(null);
-    }
-  };
-
-  // Remove item
-  const handleRemoveItem = async (itemId) => {
-    try {
-      setRemovingItem(itemId);
-
-      await removeCartItem(itemId);
-
-      const latestCart = await getCart();
-
-      setCart(latestCart);
-
-      // Update global cart count
-      await fetchCart();
-    } catch (error) {
-      console.error(
-        "REMOVE CART ITEM ERROR:",
-        error
-      );
-
-      alert(
-        error.response?.data?.message ||
-          "Unable to remove item from cart."
-      );
-    } finally {
-      setRemovingItem(null);
-    }
-  };
-
-  // Loading
-  if (loading) {
-    return (
-      <main className="min-h-[60vh] bg-[#F7F3EC] py-20">
-        <div className="container mx-auto px-6">
-          <p className="text-sm text-[#6F756F]">
-            Loading your cart...
-          </p>
-        </div>
-      </main>
-    );
-  }
-
-  // Error
-  if (error) {
-    return (
-      <main className="min-h-[60vh] bg-[#F7F3EC] py-20">
-        <div className="container mx-auto px-6">
-
-          <Link
-            to="/books"
-            className="inline-flex items-center gap-2 text-sm font-medium text-[#124C3B] transition hover:text-[#E86A2A]"
-          >
-            <ArrowLeft size={17} />
-            Continue shopping
-          </Link>
-
-          <div className="py-20 text-center">
-            <h1 className="font-serif text-4xl text-[#124C3B]">
-              Something went wrong.
-            </h1>
-
-            <p className="mt-3 text-[#6F756F]">
-              {error}
-            </p>
-          </div>
-
-        </div>
-      </main>
-    );
-  }
-
-  const items = cart?.items || [];
-
-  // Calculate subtotal
-  const subtotal = items.reduce(
-    (total, item) =>
-      total +
-      Number(item.book.price) *
-        item.quantity,
-    0
-  );
 
   return (
     <main className="min-h-[60vh] bg-[#F7F3EC] py-12 md:py-16">
@@ -181,7 +181,7 @@ const Cart = () => {
 
           <Link
             to="/books"
-            className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-[#6F756F] transition hover:text-[#124C3B]"
+            className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-[#6F756F] transition hover:text-[#124C3B] rounded-3xl"
           >
             <ArrowLeft size={17} />
             Continue shopping
@@ -218,7 +218,7 @@ const Cart = () => {
 
             <Link
               to="/books"
-              className="mt-7 inline-flex bg-[#124C3B] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#0D3D30]"
+              className="mt-7 inline-flex bg-[#124C3B] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#0D3D30] rounded-3xl"
             >
               Browse books
             </Link>
@@ -314,7 +314,7 @@ const Cart = () => {
                               isRemoving
                             }
                             aria-label="Decrease quantity"
-                            className="flex h-full w-10 items-center justify-center text-[#17211D] transition hover:text-[#E86A2A] disabled:cursor-not-allowed disabled:opacity-40"
+                            className="flex h-full w-10 items-center justify-center text-[#17211D] transition hover:text-[#E86A2A] disabled:cursor-not-allowed disabled:opacity-40 rounded-3xl"
                           >
                             <Minus size={15} />
                           </button>
@@ -342,7 +342,7 @@ const Cart = () => {
                               isRemoving
                             }
                             aria-label="Increase quantity"
-                            className="flex h-full w-10 items-center justify-center text-[#17211D] transition hover:text-[#E86A2A] disabled:cursor-not-allowed disabled:opacity-40"
+                            className="flex h-full w-10 items-center justify-center text-[#17211D] transition hover:text-[#E86A2A] disabled:cursor-not-allowed disabled:opacity-40 rounded-3xl"
                           >
                             <Plus size={15} />
                           </button>
@@ -450,7 +450,7 @@ const Cart = () => {
                 onClick={() =>
                   navigate("/checkout")
                 }
-                className="mt-7 w-full bg-[#124C3B] py-3.5 text-sm font-medium text-white transition hover:bg-[#0D3D30]"
+                className="mt-7 w-full bg-[#124C3B] py-3.5 text-sm font-medium rounded-3xl text-white transition hover:bg-[#0D3D30]"
               >
                 Proceed to checkout
               </button>

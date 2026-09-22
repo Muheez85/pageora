@@ -70,15 +70,15 @@ const AdminBooks = () => {
       {/* Header */}
       <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-medium text-[var(--pageora-orange)]">
+          <p className="text-sm font-medium text-var(--pageora-orange)">
             Inventory
           </p>
 
-          <h1 className="mt-1 text-4xl text-[var(--pageora-green)]">
+          <h1 className="mt-1 text-4xl text-var(--pageora-green)">
             Books
           </h1>
 
-          <p className="mt-2 text-sm text-[var(--pageora-muted)]">
+          <p className="mt-2 text-sm text-var(--pageora-muted)">
             Manage your books and inventory.
           </p>
         </div>
@@ -86,7 +86,7 @@ const AdminBooks = () => {
         <button
           type="button"
           onClick={() => navigate("/admin/books/add")}
-          className="inline-flex items-center justify-center gap-2 bg-[var(--pageora-green)] px-5 py-3 text-sm font-medium text-white"
+          className="inline-flex items-center  rounded-3xl justify-center gap-2 bg-var(--pageora-green) px-5 py-3 text-sm font-medium text-white"
         >
           <Plus size={18} />
           Add book
@@ -98,7 +98,7 @@ const AdminBooks = () => {
         <div className="relative max-w-md">
           <Search
             size={18}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--pageora-muted)]"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-var(--pageora-muted)"
           />
 
           <input
@@ -108,7 +108,7 @@ const AdminBooks = () => {
             onChange={(event) =>
               setSearch(event.target.value)
             }
-            className="w-full border border-[var(--pageora-border)] bg-[var(--pageora-surface)] py-3 pl-11 pr-4 text-sm outline-none focus:border-[var(--pageora-green)]"
+            className="w-full border rounded-3xl border-var(--pageora-border) bg-var(--pageora-surface) py-3 pl-11 pr-4 text-sm outline-none focus:border-var(--pageora-green)"
           />
         </div>
       </div>
@@ -117,7 +117,7 @@ const AdminBooks = () => {
       <div className="mt-8">
         {/* Loading */}
         {loading && (
-          <p className="text-sm text-[var(--pageora-muted)]">
+          <p className="text-sm text-var(--pageora-muted)">
             Loading books...
           </p>
         )}
@@ -133,8 +133,8 @@ const AdminBooks = () => {
         {!loading &&
           !error &&
           filteredBooks.length === 0 && (
-            <div className="border border-[var(--pageora-border)] bg-[var(--pageora-surface)] p-10 text-center">
-              <p className="text-sm text-[var(--pageora-muted)]">
+            <div className="border border-var(--pageora-border) bg-var(--pageora-surface) p-10 text-center">
+              <p className="text-sm text-var(--pageora-muted)">
                 No books found.
               </p>
             </div>
@@ -144,27 +144,27 @@ const AdminBooks = () => {
         {!loading &&
           !error &&
           filteredBooks.length > 0 && (
-            <div className="overflow-x-auto border border-[var(--pageora-border)] bg-[var(--pageora-surface)]">
-              <table className="w-full min-w-[800px] text-left">
-                <thead className="border-b border-[var(--pageora-border)]">
+            <div className="overflow-x-auto border border-var(--pageora-border) bg-var(--pageora-surface)">
+              <table className="w-full min-w-200 text-left">
+                <thead className="border-b border-var(--pageora-border)">
                   <tr>
-                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-[var(--pageora-muted)]">
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-var(--pageora-muted)">
                       Book
                     </th>
 
-                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-[var(--pageora-muted)]">
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-var(--pageora-muted)">
                       Category
                     </th>
 
-                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-[var(--pageora-muted)]">
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-var(--pageora-muted)">
                       Price
                     </th>
 
-                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-[var(--pageora-muted)]">
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-var(--pageora-muted)">
                       Stock
                     </th>
 
-                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-[var(--pageora-muted)]">
+                    <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-var(--pageora-muted)">
                       Actions
                     </th>
                   </tr>
@@ -174,12 +174,12 @@ const AdminBooks = () => {
                   {filteredBooks.map((book) => (
                     <tr
                       key={book.id}
-                      className="border-b border-[var(--pageora-border)] last:border-b-0"
+                      className="border-b border-var(--pageora-border) last:border-b-0"
                     >
                       {/* Book */}
                       <td className="px-5 py-5">
                         <div className="flex items-center gap-4">
-                          <div className="h-16 w-12 overflow-hidden bg-[var(--pageora-background)]">
+                          <div className="h-16 w-12 overflow-hidden bg-var(--pageora-background)">
                             {book.coverImage ? (
                               <img
                                 src={book.coverImage}
@@ -187,19 +187,19 @@ const AdminBooks = () => {
                                 className="h-full w-full object-cover"
                               />
                             ) : (
-                              <div className="flex h-full items-center justify-center text-[10px] text-[var(--pageora-muted)]">
+                              <div className="flex h-full items-center justify-center text-[10px] text-var(--pageora-muted)">
                                 No cover
                               </div>
                             )}
                           </div>
 
                           <div>
-                            <p className="font-medium text-[var(--pageora-text)]">
+                            <p className="font-medium text-var(--pageora-text)">
                               {book.title}
                             </p>
 
                             {book.authors?.length > 0 && (
-                              <p className="mt-1 text-xs text-[var(--pageora-muted)]">
+                              <p className="mt-1 text-xs text-var(--pageora-muted)">
                                 {book.authors
                                   .map(
                                     (author) =>
@@ -213,12 +213,12 @@ const AdminBooks = () => {
                       </td>
 
                       {/* Category */}
-                      <td className="px-5 py-5 text-sm text-[var(--pageora-muted)]">
+                      <td className="px-5 py-5 text-sm text-var(--pageora-muted)">
                         {book.category?.name || "—"}
                       </td>
 
                       {/* Price */}
-                      <td className="px-5 py-5 text-sm font-medium text-[var(--pageora-text)]">
+                      <td className="px-5 py-5 text-sm font-medium text-var(--pageora-text)">
                         ₦
                         {Number(book.price).toLocaleString()}
                       </td>
@@ -226,7 +226,7 @@ const AdminBooks = () => {
                       {/* Stock */}
                                         <td className="px-5 py-5">
                       <div className="flex flex-col gap-1">
-                        <span className="text-sm font-medium text-[var(--pageora-text)]">
+                        <span className="text-sm font-medium text-var(--pageora-text)">
                           {book.stock} {book.stock === 1 ? "copy" : "copies"}
                         </span>
 
@@ -260,7 +260,7 @@ const AdminBooks = () => {
                                 `/admin/books/edit/${book.id}`
                               )
                             }
-                            className="text-sm font-medium text-[var(--pageora-green)] hover:underline"
+                            className="text-sm font-medium text-var(--pageora-green) hover:underline"
                           >
                             Edit
                           </button>

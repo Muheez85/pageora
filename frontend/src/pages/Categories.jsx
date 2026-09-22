@@ -102,7 +102,7 @@ const Categories = () => {
                   to={`/books?category=${category.slug}`}
                   className="group overflow-hidden border border-[#DED8CC] bg-[#FFFDF8] transition hover:-translate-y-1 hover:border-[#124C3B]"
                 >
-                  <div className="aspect-[16/9] overflow-hidden bg-[#F0F1F2]">
+                  <div className="aspect-video-16/9 overflow-hidden bg-[#F0F1F2]">
                     {category.image ? (
                       <img
                         src={category.image}

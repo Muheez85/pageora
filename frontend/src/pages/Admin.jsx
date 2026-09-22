@@ -17,58 +17,21 @@ const Admin = () => {
   return (
     <AdminLayout>
       <Routes>
-        <Route
-          path="dashboard"
-          element={<AdminDashboard />}
-        />
+        <Route path="dashboard" element={<AdminDashboard />}/>
 
-        <Route
-          path="*"
-          element={
-            <Navigate
-              to="/admin/dashboard"
-              replace
-            />
-          }
-        />
+        <Route path="*" element={
+            <Navigate to="/admin/dashboard" replace/>}/>
         <Route path="books" element={<AdminBooks />} />
-        <Route
-  path="books/add"
-  element={<AdminAddBook />}
-/>
-<Route
-  path="books/edit/:id"
-  element={<AdminEditBook />}
-/>
-<Route
-  path="categories"
-  element={<AdminCategories />}
-/>
-<Route
-  path="authors"
-  element={<AdminAuthors />}
-/>
-<Route
-  path="orders"
-  element={<AdminOrders />}
-/>
-<Route
-  path="orders/:id"
-  element={<AdminOrderDetails />}
-/>
-<Route
-  path="customers"
-  element={<AdminCustomers />}
-/>
-<Route
-  path="customers/:id"
-  element={<AdminCustomerDetails />}
-/>
-<Route
-  path="shipping"
-  element={<AdminShipping />}
-/>
-<Route path="settings" element={<AdminSettings />} />
+        <Route path="books/add" element={<AdminAddBook />}/>
+        <Route path="books/edit/:id" element={<AdminEditBook />}/>
+        <Route path="categories" element={<AdminCategories />}/>
+        <Route path="authors" element={<AdminAuthors />}/>
+        <Route path="orders" element={<AdminOrders />}/>
+        <Route path="orders/:id" element={<AdminOrderDetails />}/>
+        <Route path="customers" element={<AdminCustomers />}/>
+        <Route path="customers/:id" element={<AdminCustomerDetails />}/>
+        <Route path="shipping" element={<AdminShipping />} />
+        <Route path="settings" element={<AdminSettings />} />
       </Routes>
     </AdminLayout>
   );

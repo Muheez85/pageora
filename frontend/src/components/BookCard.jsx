@@ -74,7 +74,7 @@ const BookCard = ({ book }) => {
 
   return (
     <article className="group  mb-5 min-w-0 overflow-hidden rounded-xl border border-[#17211D] bg-[#FFFDF8]">
-      <div className="relative aspect-[3/4] w-full overflow-hidden bg-[#F0F1F2]">
+      <div className="relative aspect-3/4 w-full overflow-hidden bg-[#F0F1F2]">
         {book.coverImage ? (
           <img
             src={book.coverImage}

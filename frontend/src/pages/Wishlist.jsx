@@ -158,7 +158,7 @@ const navigate = useNavigate();
                 className="overflow-hidden border border-[#DED8CC] bg-[#FFFDF8]"
               >
                 <Link to={`/books/${item.book.slug}`}>
-                  <div className="aspect-[3/4] overflow-hidden bg-[#F0F1F2]">
+                  <div className="aspect-3/4 overflow-hidden bg-[#F0F1F2]">
                     {item.book.coverImage ? (
                       <img
                         src={item.book.coverImage}

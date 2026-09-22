@@ -311,7 +311,7 @@ const Addresses = () => {
             <button
               type="button"
               onClick={openAddForm}
-              className="inline-flex h-11 items-center justify-center gap-2 bg-[#124C3B] px-5 text-sm font-medium text-white transition hover:bg-[#0D3D30]"
+              className="inline-flex h-11 items-center justify-center gap-2 bg-[#124C3B] px-5 text-sm font-medium text-white transition hover:bg-[#0D3D30] rounded-3xl"
             >
               <Plus size={17} />
               Add new address
@@ -364,7 +364,7 @@ const Addresses = () => {
                 onClick={closeForm}
                 disabled={saving}
                 aria-label="Close address form"
-                className="flex h-9 w-9 shrink-0 items-center justify-center text-[#6F756F] transition hover:bg-[#F7F3EC] hover:text-[#124C3B]"
+                className="flex h-9 w-9 shrink-0 items-center justify-center text-[#6F756F] transition hover:bg-[#F7F3EC] hover:text-[#124C3B] rounded-3xl"
               >
                 <X size={20} />
               </button>
@@ -391,7 +391,7 @@ const Addresses = () => {
                   onChange={handleChange}
                   placeholder="e.g. Home, School, Work"
                   required
-                  className="mt-2 h-12 w-full border border-[#DED8CC] bg-[#FFFDF8] px-4 text-sm outline-none transition focus:border-[#124C3B]"
+                  className="mt-2 h-12 w-full border border-[#DED8CC] bg-[#FFFDF8] px-4 text-sm outline-none transition focus:border-[#124C3B] rounded-3xl"
                 />
               </div>
 
@@ -412,7 +412,7 @@ const Addresses = () => {
                     value={formData.fullName}
                     onChange={handleChange}
                     required
-                    className="mt-2 h-12 w-full border border-[#DED8CC] bg-[#FFFDF8] px-4 text-sm outline-none transition focus:border-[#124C3B]"
+                    className="mt-2 h-12 w-full border border-[#DED8CC] bg-[#FFFDF8] px-4 text-sm outline-none transition focus:border-[#124C3B] rounded-3xl"
                   />
                 </div>
 
@@ -432,7 +432,7 @@ const Addresses = () => {
                     onChange={handleChange}
                     placeholder="08012345678"
                     required
-                    className="mt-2 h-12 w-full border border-[#DED8CC] bg-[#FFFDF8] px-4 text-sm outline-none transition focus:border-[#124C3B]"
+                    className="mt-2 h-12 w-full border border-[#DED8CC] bg-[#FFFDF8] px-4 text-sm outline-none transition focus:border-[#124C3B] rounded-3xl"
                   />
                 </div>
               </div>
@@ -454,7 +454,7 @@ const Addresses = () => {
                   placeholder="House number, street name, area..."
                   rows={3}
                   required
-                  className="mt-2 w-full resize-none border border-[#DED8CC] bg-[#FFFDF8] px-4 py-3 text-sm outline-none transition focus:border-[#124C3B]"
+                  className="mt-2 w-full resize-none border border-[#DED8CC] bg-[#FFFDF8] px-4 py-3 text-sm outline-none transition focus:border-[#124C3B] rounded-3xl"
                 />
               </div>
 
@@ -475,7 +475,7 @@ const Addresses = () => {
                     value={formData.city}
                     onChange={handleChange}
                     required
-                    className="mt-2 h-12 w-full border border-[#DED8CC] bg-[#FFFDF8] px-4 text-sm outline-none transition focus:border-[#124C3B]"
+                    className="mt-2 h-12 w-full border border-[#DED8CC] bg-[#FFFDF8] px-4 text-sm outline-none transition focus:border-[#124C3B] rounded-3xl"
                   />
                 </div>
 
@@ -494,7 +494,7 @@ const Addresses = () => {
                     value={formData.state}
                     onChange={handleChange}
                     required
-                    className="mt-2 h-12 w-full border border-[#DED8CC] bg-[#FFFDF8] px-4 text-sm outline-none transition focus:border-[#124C3B]"
+                    className="mt-2 h-12 w-full border border-[#DED8CC] bg-[#FFFDF8] px-4 text-sm outline-none transition focus:border-[#124C3B] rounded-3xl"
                   />
                 </div>
               </div>
@@ -515,7 +515,7 @@ const Addresses = () => {
                   value={formData.country}
                   onChange={handleChange}
                   required
-                  className="mt-2 h-12 w-full border border-[#DED8CC] bg-[#FFFDF8] px-4 text-sm outline-none transition focus:border-[#124C3B]"
+                  className="mt-2 h-12 w-full border border-[#DED8CC] bg-[#FFFDF8] px-4 text-sm outline-none transition focus:border-[#124C3B] rounded-3xl"
                 />
               </div>
 
@@ -546,7 +546,7 @@ const Addresses = () => {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="inline-flex h-12 items-center justify-center gap-2 bg-[#124C3B] px-6 text-sm font-medium text-white transition hover:bg-[#0D3D30] disabled:cursor-not-allowed disabled:bg-[#9AA19C]"
+                  className="inline-flex h-12 items-center justify-center gap-2 bg-[#124C3B] px-6 text-sm font-medium text-white transition hover:bg-[#0D3D30] disabled:cursor-not-allowed disabled:bg-[#9AA19C] rounded-3xl"
                 >
                   <Check size={17} />
 
@@ -561,7 +561,7 @@ const Addresses = () => {
                   type="button"
                   onClick={closeForm}
                   disabled={saving}
-                  className="inline-flex h-12 items-center justify-center gap-2 border border-[#DED8CC] px-6 text-sm font-medium text-[#17211D] transition hover:border-[#124C3B]"
+                  className="inline-flex h-12 items-center justify-center gap-2 border border-[#DED8CC] px-6 text-sm font-medium text-[#17211D] transition hover:border-[#124C3B] rounded-3xl"
                 >
                   <X size={17} />
                   Cancel
@@ -592,7 +592,7 @@ const Addresses = () => {
               <button
                 type="button"
                 onClick={openAddForm}
-                className="mt-6 inline-flex items-center gap-2 bg-[#124C3B] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0D3D30]"
+                className="mt-6 inline-flex items-center gap-2 bg-[#124C3B] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#0D3D30] rounded-3xl"
               >
                 <Plus size={17} />
                 Add your first address
@@ -618,7 +618,7 @@ const Addresses = () => {
                         </h2>
 
                         {address.isDefault && (
-                          <span className="bg-[#EAF3EE] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#124C3B]">
+                          <span className="bg-[#EAF3EE] px-2 py-1 text-[10px] font-semibold uppercase tracking-0.1em text-[#124C3B]">
                             Default
                           </span>
                         )}
@@ -632,7 +632,7 @@ const Addresses = () => {
                   </div>
 
                   {/* Address information */}
-                  <div className="mt-5 space-y-1 text-sm leading-6 text-[#17211D]">
+                  <div className="mt-5 space-y-1 text-sm leading-6 text-[#17211D] rounded-3xl">
                     <p className="font-medium">
                       {address.fullName}
                     </p>
@@ -655,7 +655,7 @@ const Addresses = () => {
                       onClick={() =>
                         openEditForm(address)
                       }
-                      className="inline-flex items-center gap-2 text-sm font-medium text-[#124C3B] transition hover:text-[#E86A2A]"
+                      className="inline-flex  rounded-3xl items-center gap-2 text-sm font-medium text-[#124C3B] transition hover:text-[#E86A2A]"
                     >
                       <Edit3 size={16} />
                       Edit
@@ -669,7 +669,7 @@ const Addresses = () => {
                       disabled={
                         deletingId === address.id
                       }
-                      className="inline-flex items-center gap-2 text-sm font-medium text-[#6F756F] transition hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="inline-flex items-center gap-2 text-sm font-medium text-[#6F756F] transition hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50 rounded-3xl"
                     >
                       <Trash2 size={16} />
                       {deletingId === address.id

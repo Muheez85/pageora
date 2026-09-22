@@ -33,10 +33,7 @@ const AdminCategories = () => {
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
 
-  // ---------------------------------------
-  // LOAD CATEGORIES
-  // ---------------------------------------
-
+ l // load categories 
   const loadCategories = async () => {
     try {
       setLoading(true);
@@ -61,9 +58,7 @@ const AdminCategories = () => {
     loadCategories();
   }, []);
 
-  // ---------------------------------------
-  // SEARCH
-  // ---------------------------------------
+// search
 
   const filteredCategories = categories.filter((category) =>
     category.name
@@ -71,10 +66,8 @@ const AdminCategories = () => {
       .includes(search.toLowerCase())
   );
 
-  // ---------------------------------------
-  // OPEN ADD FORM
-  // ---------------------------------------
-
+  
+  // open add form
   const handleOpenAdd = () => {
     setEditingCategory(null);
 
@@ -91,9 +84,7 @@ const AdminCategories = () => {
     setShowForm(true);
   };
 
-  // ---------------------------------------
-  // OPEN EDIT FORM
-  // ---------------------------------------
+  // open edit form
 
   const handleOpenEdit = (category) => {
     setEditingCategory(category);
@@ -111,9 +102,7 @@ const AdminCategories = () => {
     setShowForm(true);
   };
 
-  // ---------------------------------------
-  // CLOSE FORM
-  // ---------------------------------------
+  // close form
 
   const handleCloseForm = () => {
     setShowForm(false);
@@ -129,10 +118,7 @@ const AdminCategories = () => {
     setError("");
   };
 
-  // ---------------------------------------
-  // FORM INPUT
-  // ---------------------------------------
-
+  // form input 
   const handleChange = (event) => {
     setFormData({
       ...formData,
@@ -140,10 +126,7 @@ const AdminCategories = () => {
     });
   };
 
-  // ---------------------------------------
-  // IMAGE SELECT
-  // ---------------------------------------
-
+//  image set 
   const handleImageChange = (event) => {
     const file = event.target.files?.[0];
 
@@ -265,15 +248,15 @@ const AdminCategories = () => {
 
       <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-medium text-[var(--pageora-orange)]">
+          <p className="text-sm font-medium text-var(--pageora-orange)">
             Catalog
           </p>
 
-          <h1 className="mt-1 text-4xl text-[var(--pageora-green)]">
+          <h1 className="mt-1 text-4xl text-var(--pageora-green)">
             Categories
           </h1>
 
-          <p className="mt-2 text-sm text-[var(--pageora-muted)]">
+          <p className="mt-2 text-sm text-var(--pageora-muted)">
             Organize your bookstore and manage book categories.
           </p>
         </div>
@@ -281,7 +264,7 @@ const AdminCategories = () => {
         <button
           type="button"
           onClick={handleOpenAdd}
-          className="inline-flex items-center justify-center gap-2 bg-[var(--pageora-green)] px-5 py-3 text-sm font-medium text-white"
+          className="inline-flex items-center justify-center gap-2 bg-var(--pageora-green) rounded-3xl px-5 py-3 text-sm font-medium text-white"
         >
           <Plus size={18} />
           Add category
@@ -302,7 +285,7 @@ const AdminCategories = () => {
         <div className="relative max-w-md">
           <Search
             size={18}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--pageora-muted)]"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-var(--pageora-muted)"
           />
 
           <input
@@ -312,7 +295,7 @@ const AdminCategories = () => {
             onChange={(event) =>
               setSearch(event.target.value)
             }
-            className="w-full border border-[var(--pageora-border)] bg-[var(--pageora-surface)] py-3 pl-11 pr-4 text-sm outline-none focus:border-[var(--pageora-green)]"
+            className="w-full border border-var(--pageora-border) rounded-3xl bg-var(--pageora-surface) py-3 pl-11 pr-4 text-sm outline-none focus:border-var(--pageora-green)"
           />
         </div>
       </div>
@@ -329,7 +312,7 @@ const AdminCategories = () => {
 
       {loading && (
         <div className="mt-8">
-          <p className="text-sm text-[var(--pageora-muted)]">
+          <p className="text-sm text-var(--pageora-muted)">
             Loading categories...
           </p>
         </div>
@@ -340,8 +323,8 @@ const AdminCategories = () => {
       {!loading &&
         !error &&
         filteredCategories.length === 0 && (
-          <div className="mt-8 border border-[var(--pageora-border)] bg-[var(--pageora-surface)] p-10 text-center">
-            <p className="text-sm text-[var(--pageora-muted)]">
+          <div className="mt-8 border border-var(--pageora-border) bg-var(--pageora-surface) p-10 text-center">
+            <p className="text-sm text-var(--pageora-muted)">
               {search
                 ? "No categories match your search."
                 : "No categories found."}
@@ -351,7 +334,7 @@ const AdminCategories = () => {
               <button
                 type="button"
                 onClick={handleOpenAdd}
-                className="mt-4 text-sm font-medium text-[var(--pageora-green)] hover:underline"
+                className="mt-4 text-sm font-medium  rounded-3xl text-var(--pageora-green) hover:underline"
               >
                 Add your first category
               </button>
@@ -363,23 +346,23 @@ const AdminCategories = () => {
 
       {!loading &&
         filteredCategories.length > 0 && (
-          <div className="mt-8 overflow-x-auto border border-[var(--pageora-border)] bg-[var(--pageora-surface)]">
-            <table className="w-full min-w-[700px] text-left">
-              <thead className="border-b border-[var(--pageora-border)]">
+          <div className="mt-8 overflow-x-auto border border-var(--pageora-border) bg-var(--pageora-surface)">
+            <table className="w-full min-w-175 text-left">
+              <thead className="border-b border-var(--pageora-border)">
                 <tr>
-                  <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-[var(--pageora-muted)]">
+                  <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-var(--pageora-muted)">
                     Category
                   </th>
 
-                  <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-[var(--pageora-muted)]">
+                  <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-var(--pageora-muted)">
                     Slug
                   </th>
 
-                  <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-[var(--pageora-muted)]">
+                  <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-var(--pageora-muted)">
                     Books
                   </th>
 
-                  <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-[var(--pageora-muted)]">
+                  <th className="px-5 py-4 text-xs font-semibold uppercase tracking-wide text-var(--pageora-muted)">
                     Actions
                   </th>
                 </tr>
@@ -389,13 +372,13 @@ const AdminCategories = () => {
                 {filteredCategories.map((category) => (
                   <tr
                     key={category.id}
-                    className="border-b border-[var(--pageora-border)] last:border-b-0"
+                    className="border-b border-var(--pageora-border) last:border-b-0"
                   >
                     {/* CATEGORY */}
 
                     <td className="px-5 py-5">
                       <div className="flex items-center gap-4">
-                        <div className="h-14 w-14 shrink-0 overflow-hidden bg-[var(--pageora-background)]">
+                        <div className="h-14 w-14 shrink-0 overflow-hidden bg-var(--pageora-background)">
                           {category.image ? (
                             <img
                               src={category.image}
@@ -403,18 +386,18 @@ const AdminCategories = () => {
                               className="h-full w-full object-cover"
                             />
                           ) : (
-                            <div className="flex h-full items-center justify-center text-[10px] text-[var(--pageora-muted)]">
+                            <div className="flex h-full items-center justify-center text-[10px] text-var(--pageora-muted)">
                               No image
                             </div>
                           )}
                         </div>
 
                         <div>
-                          <p className="font-medium text-[var(--pageora-text)]">
+                          <p className="font-medium text-var(--pageora-text)">
                             {category.name}
                           </p>
 
-                          <p className="mt-1 text-xs text-[var(--pageora-muted)]">
+                          <p className="mt-1 text-xs text-var(--pageora-muted)">
                             Category #{category.id}
                           </p>
                         </div>
@@ -423,14 +406,14 @@ const AdminCategories = () => {
 
                     {/* SLUG */}
 
-                    <td className="px-5 py-5 text-sm text-[var(--pageora-muted)]">
+                    <td className="px-5 py-5 text-sm text-var(--pageora-muted)">
                       {category.slug}
                     </td>
 
                     {/* BOOK COUNT */}
 
                     <td className="px-5 py-5">
-                      <span className="text-sm font-medium text-[var(--pageora-text)]">
+                      <span className="text-sm font-medium text-var(--pageora-text)">
                         {category._count?.books || 0}{" "}
                         {category._count?.books === 1
                           ? "book"
@@ -447,7 +430,7 @@ const AdminCategories = () => {
                           onClick={() =>
                             handleOpenEdit(category)
                           }
-                          className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--pageora-green)] hover:underline"
+                          className="inline-flex items-center gap-1.5 text-sm font-medium text-var(--pageora-green) rounded-3xl hover:underline"
                         >
                           <Pencil size={15} />
                           Edit
@@ -458,7 +441,7 @@ const AdminCategories = () => {
                           onClick={() =>
                             handleDelete(category.id)
                           }
-                          className="inline-flex items-center gap-1.5 text-sm font-medium text-red-600 hover:underline"
+                          className="inline-flex items-center gap-1.5  rounded-3xltext-sm font-medium text-red-600 hover:underline"
                         >
                           <Trash2 size={15} />
                           Delete
@@ -476,18 +459,18 @@ const AdminCategories = () => {
 
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 py-6">
-          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto bg-[var(--pageora-surface)]">
+          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto bg-var(--pageora-surface)">
             {/* MODAL HEADER */}
 
-            <div className="flex items-center justify-between border-b border-[var(--pageora-border)] px-6 py-5">
+            <div className="flex items-center justify-between border-b border-var(--pageora-border) px-6 py-5">
               <div>
-                <p className="text-sm font-medium text-[var(--pageora-orange)]">
+                <p className="text-sm font-medium text-var(--pageora-orange)">
                   {editingCategory
                     ? "Edit category"
                     : "New category"}
                 </p>
 
-                <h2 className="mt-1 text-2xl text-[var(--pageora-green)]">
+                <h2 className="mt-1 text-2xl text-var(--pageora-green)">
                   {editingCategory
                     ? "Update category"
                     : "Add category"}
@@ -497,7 +480,7 @@ const AdminCategories = () => {
               <button
                 type="button"
                 onClick={handleCloseForm}
-                className="text-[var(--pageora-muted)] hover:text-[var(--pageora-text)]"
+                className="text-var(--pageora-muted)  rounded-3xl hover:text-var(--pageora-text)"
               >
                 <X size={21} />
               </button>
@@ -520,7 +503,7 @@ const AdminCategories = () => {
               {/* NAME */}
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-[var(--pageora-text)]">
+                <label className="mb-2 block text-sm font-medium text-var(--pageora-text)">
                   Category name
                 </label>
 
@@ -531,10 +514,10 @@ const AdminCategories = () => {
                   onChange={handleChange}
                   placeholder="e.g. Fiction"
                   required
-                  className="w-full border border-[var(--pageora-border)] bg-white px-4 py-3 text-sm outline-none focus:border-[var(--pageora-green)]"
+                  className="w-full border border-var(--pageora-border) bg-white px-4 py-3 text-sm rounded-3xl outline-none focus:border-var(--pageora-green)"
                 />
 
-                <p className="mt-2 text-xs text-[var(--pageora-muted)]">
+                <p className="mt-2 text-xs text-var(--pageora-muted)">
                   The category slug will be generated automatically.
                 </p>
               </div>
@@ -542,11 +525,11 @@ const AdminCategories = () => {
               {/* IMAGE */}
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-[var(--pageora-text)]">
+                <label className="mb-2 block text-sm font-medium text-var(--pageora-text)">
                   Category image
                 </label>
 
-                <label className="flex min-h-48 cursor-pointer flex-col items-center justify-center border border-dashed border-[var(--pageora-border)] bg-[var(--pageora-background)] px-5 py-6 text-center">
+                <label className="flex min-h-48 cursor-pointer flex-col items-center justify-center border border-dashed border-var(--pageora-border) bg-var(--pageora-background) px-5 py-6 text-center">
                   {imagePreview ? (
                     <img
                       src={imagePreview}
@@ -557,14 +540,14 @@ const AdminCategories = () => {
                     <>
                       <ImagePlus
                         size={30}
-                        className="text-[var(--pageora-muted)]"
+                        className="text-var(--pageora-muted)"
                       />
 
-                      <p className="mt-3 text-sm font-medium text-[var(--pageora-text)]">
+                      <p className="mt-3 text-sm font-medium text-var(--pageora-text)">
                         Choose an image
                       </p>
 
-                      <p className="mt-1 text-xs text-[var(--pageora-muted)]">
+                      <p className="mt-1 text-xs text-var(--pageora-muted)">
                         JPG, PNG or WEBP
                       </p>
                     </>
@@ -579,7 +562,7 @@ const AdminCategories = () => {
                 </label>
 
                 {imagePreview && (
-                  <p className="mt-2 text-xs text-[var(--pageora-muted)]">
+                  <p className="mt-2 text-xs text-var(--pageora-muted)">
                     Select another image to replace the current one.
                   </p>
                 )}
@@ -587,18 +570,18 @@ const AdminCategories = () => {
 
               {/* BUTTONS */}
 
-              <div className="flex flex-col-reverse gap-3 border-t border-[var(--pageora-border)] pt-5 sm:flex-row sm:justify-end">
+              <div className="flex flex-col-reverse gap-3 border-t border-var(--pageora-border) pt-5 sm:flex-row sm:justify-end">
                 <button
                   type="button"
                   onClick={handleCloseForm}
-                  className="px-5 py-3 text-sm font-medium text-[var(--pageora-muted)] hover:text-[var(--pageora-text)]"
+                  className="px-5 py-3 text-sm font-medium text-var(--pageora-muted) rounded-3xl  hover:text-var(--pageora-text)"
                 >
                   Cancel
                 </button>
 
                 <button
                   type="submit"
-                  className="bg-[var(--pageora-green)] px-5 py-3 text-sm font-medium text-white"
+                  className=" rounded-3xl bg-var(--pageora-green) px-5 py-3 text-sm font-medium text-white"
                 >
                   {editingCategory
                     ? "Save changes"

@@ -61,13 +61,13 @@ const Login = () => {
   };
 
   return (
-    <main className="min-h-screen bg-[var(--pageora-background)] flex items-center justify-center px-6 py-12">
+    <main className="min-h-screen bg-var(--pageora-background) flex items-center justify-center px-6 py-12">
       <div className="w-full max-w-md">
 
         {/* Back to home */}
         <Link
           to="/"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-[var(--pageora-muted)] transition hover:text-[var(--pageora-green)]"
+          className="mb-8 inline-flex items-center gap-2 text-sm text-var(--pageora-muted) transition hover:text-var(--pageora-green)"
         >
           <ArrowLeft size={16} />
           Back to home
@@ -75,21 +75,21 @@ const Login = () => {
 
         {/* Logo / Heading */}
         <div className="mb-8 text-center">
-          <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full bg-[var(--pageora-green)] text-white">
+          <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-full bg-var(--pageora-green) text-white">
             <BookOpen size={22} />
           </div>
 
-          <h1 className="mb-3 text-4xl text-[var(--pageora-text)]">
+          <h1 className="mb-3 text-4xl text-var(--pageora-text)">
             Welcome back
           </h1>
 
-          <p className="text-[var(--pageora-muted)]">
+          <p className="text-var(--pageora-muted)">
             Sign in to continue your Pageora journey.
           </p>
         </div>
 
         {/* Login Card */}
-        <div className="border border-[var(--pageora-border)] bg-[var(--pageora-surface)] p-7 sm:p-8">
+        <div className="border border-var(--pageora-border) bg-var(--pageora-surface) p-7 sm:p-8">
           <form
             onSubmit={handleSubmit}
             className="space-y-5"
@@ -120,7 +120,7 @@ const Login = () => {
                 placeholder="you@example.com"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full rounded-3xl border border-[var(--pageora-border)] bg-white px-4 py-3 outline-none transition focus:border-[var(--pageora-green)]"
+                className="w-full rounded-3xl border border-var(--pageora-border) bg-white px-4 py-3 outline-none transition focus:border-var(--pageora-green)"
               />
             </div>
 
@@ -136,7 +136,7 @@ const Login = () => {
 
                 <button
                   type="button"
-                  className="text-sm text-[var(--pageora-green)] hover:underline"
+                  className="text-sm text-var(--pageora-green) hover:underline"
                 >
                   Forgot password?
                 </button>
@@ -152,7 +152,7 @@ const Login = () => {
                   placeholder="Enter your password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full rounded-3xl border border-[var(--pageora-border)] bg-white px-4 py-3 pr-12 outline-none transition focus:border-[var(--pageora-green)]"
+                  className="w-full rounded-3xl border border-var(--pageora-border) bg-white px-4 py-3 pr-12 outline-none transition focus:border-var(--pageora-green)"
                 />
 
                 <button
@@ -160,7 +160,7 @@ const Login = () => {
                   onClick={() =>
                     setShowPassword((current) => !current)
                   }
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--pageora-muted)] transition hover:text-[var(--pageora-green)]"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-var(--pageora-muted) transition hover:text-var(--pageora-green)"
                   aria-label={
                     showPassword
                       ? "Hide password"
@@ -180,18 +180,18 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-3xl bg-[var(--pageora-green)] py-3.5 font-medium text-white transition hover:bg-[#0d3d30] disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-3xl bg-var(--pageora-green) py-3.5 font-medium text-white transition hover:bg-[#0d3d30] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? "Signing in..." : "Sign in"}
             </button>
           </form>
 
           {/* Sign Up */}
-          <p className="mt-7 text-center text-sm text-[var(--pageora-muted)]">
+          <p className="mt-7 text-center text-sm text-var(--pageora-muted)">
             Don't have an account?{" "}
             <Link
               to="/signup"
-              className="font-medium text-[var(--pageora-green)] hover:underline"
+              className="font-medium text-var(--pageora-green) hover:underline"
             >
               Create one
             </Link>
@@ -199,7 +199,7 @@ const Login = () => {
         </div>
 
         {/* Terms */}
-        <p className="mt-6 text-center text-xs text-[var(--pageora-muted)]">
+        <p className="mt-6 text-center text-xs text-var(--pageora-muted)">
           By signing in, you agree to Pageora's terms and
           privacy policy.
         </p>

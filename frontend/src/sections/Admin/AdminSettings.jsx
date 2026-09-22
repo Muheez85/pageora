@@ -107,7 +107,7 @@ const AdminSettings = () => {
 
   if (loading) {
     return (
-      <div className="min-h-[400px] flex items-center justify-center">
+      <div className="min-h-400px flex items-center justify-center">
         <Loader2
           className="animate-spin"
           size={28}

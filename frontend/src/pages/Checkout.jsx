@@ -302,7 +302,7 @@ const Checkout = () => {
         <div className="mb-10">
           <Link
             to="/cart"
-            className="mb-5 inline-flex items-center gap-2 text-sm text-[#6F756F] hover:text-[#124C3B]"
+            className="mb-5 inline-flex items-center gap-2 text-sm text-[#6F756F] hover:text-[#124C3B] rounded-3xl"
           >
             <ArrowLeft size={17} />
             Back to cart
@@ -350,7 +350,7 @@ const Checkout = () => {
                   <select
                     value={selectedAddressId}
                     onChange={handleAddressSelect}
-                    className="mt-6 w-full border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                    className="mt-6 w-full border border-[#DED8CC] bg-white px-4 py-3 text-sm-none focus:border-[#124C3B]"
                   >
                     <option value="">
                       Select a saved address
@@ -383,7 +383,7 @@ const Checkout = () => {
                         value={addressForm.label}
                         onChange={handleAddressChange}
                         placeholder="Label e.g. Home"
-                        className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                        className="border border-[#DED8CC] bg-white px-4 py-3 text-sm-none rounded-3xl focus:border-[#124C3B]"
                       />
 
                       <input
@@ -391,7 +391,7 @@ const Checkout = () => {
                         value={addressForm.fullName}
                         onChange={handleAddressChange}
                         placeholder="Full name"
-                        className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                        className="border border-[#DED8CC] bg-white px-4 py-3 text-sm-none rounded-3xl focus:border-[#124C3B]"
                       />
 
                       <input
@@ -399,7 +399,7 @@ const Checkout = () => {
                         value={addressForm.phone}
                         onChange={handleAddressChange}
                         placeholder="Phone number"
-                        className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                        className="border border-[#DED8CC] bg-white px-4 py-3 text-sm-none rounded-3xl focus:border-[#124C3B]"
                       />
 
                       <input
@@ -407,7 +407,7 @@ const Checkout = () => {
                         value={addressForm.city}
                         onChange={handleAddressChange}
                         placeholder="City"
-                        className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                        className="border border-[#DED8CC] bg-white px-4 py-3 rounded-3xl text-sm-none focus:border-[#124C3B]"
                       />
 
                       <input
@@ -415,7 +415,7 @@ const Checkout = () => {
                         value={addressForm.state}
                         onChange={handleAddressChange}
                         placeholder="State"
-                        className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                        className="border border-[#DED8CC] bg-white px-4 py-3 rounded-3xl text-sm-none focus:border-[#124C3B]"
                       />
 
                       <input
@@ -423,7 +423,7 @@ const Checkout = () => {
                         value={addressForm.country}
                         onChange={handleAddressChange}
                         placeholder="Country"
-                        className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                        className="border border-[#DED8CC] bg-white px-4 py-3  rounded-3xl text-sm-none focus:border-[#124C3B]"
                       />
 
                       <textarea
@@ -432,7 +432,7 @@ const Checkout = () => {
                         onChange={handleAddressChange}
                         placeholder="Full delivery address"
                         rows="3"
-                        className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B] sm:col-span-2"
+                        className="border border-[#DED8CC] bg-white px-4 py-3 rounded-3xl text-sm-none focus:border-[#124C3B] sm:col-span-2"
                       />
 
                       <label className="flex items-center gap-2 text-sm text-[#6F756F]">
@@ -456,7 +456,7 @@ const Checkout = () => {
                       type="button"
                       onClick={saveAddress}
                       disabled={savingAddress}
-                      className="mt-5 bg-[#124C3B] px-5 py-3 text-sm font-medium text-white disabled:opacity-50"
+                      className="mt-5 bg-[#124C3B] px-5 py-3 text-sm font-medium rounded-3xl text-white disabled:opacity-50"
                     >
                       {savingAddress
                         ? "Saving..."
@@ -478,7 +478,7 @@ const Checkout = () => {
                     value={formData.shippingName}
                     onChange={handleChange}
                     placeholder="Full name"
-                    className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                    className="border border-[#DED8CC] bg-white px-4 py-3 text-sm-none rounded-3xl focus:border-[#124C3B]"
                   />
 
                   <input
@@ -486,7 +486,7 @@ const Checkout = () => {
                     value={formData.shippingPhone}
                     onChange={handleChange}
                     placeholder="Phone number"
-                    className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                    className="border border-[#DED8CC] bg-white px-4 py-3 text-sm-none rounded-3xl focus:border-[#124C3B]"
                   />
 
                   <textarea
@@ -495,7 +495,7 @@ const Checkout = () => {
                     onChange={handleChange}
                     placeholder="Delivery address"
                     rows="3"
-                    className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B] sm:col-span-2"
+                    className="border border-[#DED8CC] bg-white rounded-3xl px-4 py-3 text-sm-none focus:border-[#124C3B] sm:col-span-2"
                   />
 
                   <input
@@ -503,7 +503,7 @@ const Checkout = () => {
                     value={formData.shippingCity}
                     onChange={handleChange}
                     placeholder="City"
-                    className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                    className="border border-[#DED8CC] bg-white rounded-3xl px-4 py-3 text-sm-none focus:border-[#124C3B]"
                   />
 
                   <input
@@ -511,7 +511,7 @@ const Checkout = () => {
                     value={formData.shippingState}
                     onChange={handleChange}
                     placeholder="State"
-                    className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                    className="border border-[#DED8CC] bg-white rounded-3xl px-4 py-3 text-sm-none focus:border-[#124C3B]"
                   />
 
                   <input
@@ -519,7 +519,7 @@ const Checkout = () => {
                     value={formData.shippingCountry}
                     onChange={handleChange}
                     placeholder="Country"
-                    className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                    className="border border-[#DED8CC] rounded-3xl bg-white px-4 py-3 text-sm-none focus:border-[#124C3B]"
                   />
 
                   <select
@@ -530,7 +530,7 @@ const Checkout = () => {
                       );
                       setError("");
                     }}
-                    className="border border-[#DED8CC] bg-white px-4 py-3 text-sm outline-none focus:border-[#124C3B]"
+                    className="border border-[#DED8CC] rounded-3xl bg-white px-4 py-3 text-sm-none focus:border-[#124C3B]"
                   >
                     <option value="">
                       Select delivery location

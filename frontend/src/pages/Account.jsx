@@ -14,10 +14,10 @@ const Account = () => {
 
   return (
     <main className="min-h-[70vh]">
-      <div className="container mx-auto px-6 py-10 sm:py-14">
+      <div className="container mx-auto px-6 py-10 sm:py-14 ">
 
         {/* Header */}
-        <div className="border-b border-[#DED8CC] pb-8">
+        <div className="border-b border-[#DED8CC] pb-8 rounded-3xl">
           <p className="text-sm font-medium uppercase tracking-[0.12em] text-[#E86A2A]">
             My account
           </p>
@@ -39,7 +39,7 @@ const Account = () => {
           {/* Profile */}
           <Link
             to="/account/profile"
-            className="group border border-[#DED8CC] bg-[#FFFDF8] p-6 transition hover:border-[#124C3B]"
+            className="group border border-[#DED8CC] bg-[#FFFDF8] p-6 transition hover:border-[#124C3B] rounded-3xl"
           >
             <div className="flex items-start justify-between">
               <div className="flex h-11 w-11 items-center justify-center bg-[#F7F3EC] text-[#124C3B]">
@@ -64,7 +64,7 @@ const Account = () => {
           {/* Addresses */}
           <Link
             to="/account/addresses"
-            className="group border border-[#DED8CC] bg-[#FFFDF8] p-6 transition hover:border-[#124C3B]"
+            className="group border border-[#DED8CC] bg-[#FFFDF8] p-6 transition hover:border-[#124C3B] rounded-3xl"
           >
             <div className="flex items-start justify-between">
               <div className="flex h-11 w-11 items-center justify-center bg-[#F7F3EC] text-[#124C3B]">
@@ -89,7 +89,7 @@ const Account = () => {
           {/* Orders */}
           <Link
             to="/orders"
-            className="group border border-[#DED8CC] bg-[#FFFDF8] p-6 transition hover:border-[#124C3B]"
+            className="group border border-[#DED8CC] bg-[#FFFDF8] p-6 transition hover:border-[#124C3B] rounded-3xl"
           >
             <div className="flex items-start justify-between">
               <div className="flex h-11 w-11 items-center justify-center bg-[#F7F3EC] text-[#124C3B]">
@@ -114,7 +114,7 @@ const Account = () => {
           {/* Settings */}
           <Link
             to="/account/settings"
-            className="group border border-[#DED8CC] bg-[#FFFDF8] p-6 transition hover:border-[#124C3B]"
+            className="group border border-[#DED8CC] bg-[#FFFDF8] p-6 transition hover:border-[#124C3B] rounded-3xl"
           >
             <div className="flex items-start justify-between">
               <div className="flex h-11 w-11 items-center justify-center bg-[#F7F3EC] text-[#124C3B]">
@@ -136,36 +136,36 @@ const Account = () => {
             </p>
           </Link>
           {/* Admin Dashboard */}
-{user?.role === "admin" && (
+            {user?.role === "admin" && (
   <Link
     to="/admin"
-    className="group border border-[#124C3B] bg-[#124C3B] p-6 transition hover:bg-[#0D3D30]"
+    className="group border border-[#124C3B] bg-[#124C3B] p-6 transition hover:bg-[#0D3D30] rounded-3xl"
   >
-    <div className="flex items-start justify-between">
-      <div className="flex h-11 w-11 items-center justify-center bg-white/10 text-white">
-        <LayoutDashboard
-          size={21}
-          strokeWidth={1.8}
-        />
-      </div>
+            <div className="flex items-start justify-between">
+              <div className="flex h-11 w-11 items-center justify-center bg-white/10 text-white">
+                <LayoutDashboard
+                  size={21}
+                  strokeWidth={1.8}
+                />
+              </div>
 
-      <ChevronRight
-        size={20}
-        className="text-white/70 transition group-hover:translate-x-1 group-hover:text-white"
-      />
-    </div>
+              <ChevronRight
+                size={20}
+                className="text-white/70 transition group-hover:translate-x-1 group-hover:text-white"
+              />
+            </div>
 
-    <h2 className="mt-6 text-2xl text-white">
-      Admin Dashboard
-    </h2>
+            <h2 className="mt-6 text-2xl text-white">
+              Admin Dashboard
+            </h2>
 
-    <p className="mt-2 text-sm leading-6 text-white/70">
-      Manage books, orders, customers, inventory,
-      and your Pageora store.
-    </p>
-  </Link>
-)}
-        </div>
+            <p className="mt-2 text-sm leading-6 text-white/70">
+              Manage books, orders, customers, inventory,
+              and your Pageora store.
+            </p>
+          </Link>
+        )}
+                </div>
       </div>
     </main>
   );
