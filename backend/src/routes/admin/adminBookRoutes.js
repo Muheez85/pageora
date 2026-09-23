@@ -1,4 +1,3 @@
-
 const express = require("express");
 
 const {
@@ -10,7 +9,6 @@ const {
 
 const authMiddleware = require("../../middleware/authMiddleware");
 const adminMiddleware = require("../../middleware/adminMiddleware");
-
 const upload = require("../../middleware/uploadMiddleware");
 
 const router = express.Router();
@@ -18,12 +16,16 @@ const router = express.Router();
 router.use(authMiddleware);
 router.use(adminMiddleware);
 
+// Get all books
 router.get("/", getBooks);
 
+// Create book
 router.post("/", upload.single("image"), createBook);
 
-router.put("/:id", upload.single("image"), updateBook);
+// Update book
+router.patch("/:id", upload.single("image"), updateBook);
 
+// Delete book
 router.delete("/:id", deleteBook);
 
 module.exports = router;
