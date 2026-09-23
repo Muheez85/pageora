@@ -18,6 +18,24 @@ const wishlistRoutes = require("./routes/wishlistRoutes");
 const adminRoutes = require("./routes/admin/adminRoutes");
 const adminBookRoutes = require("./routes/admin/adminBookRoutes");
 // Middleware
+
+console.log("ROUTE TYPES:", {
+  testRoutes: typeof testRoutes,
+  bookRoutes: typeof bookRoutes,
+  categoryRoutes: typeof categoryRoutes,
+  authorRoutes: typeof authorRoutes,
+  cartRoutes: typeof cartRoutes,
+  authRoutes: typeof authRoutes,
+  orderRoutes: typeof orderRoutes,
+  shippingRoutes: typeof shippingRoutes,
+  paymentRoutes: typeof paymentRoutes,
+  userRoutes: typeof userRoutes,
+  addressRoutes: typeof addressRoutes,
+  settingsRoutes: typeof settingsRoutes,
+  wishlistRoutes: typeof wishlistRoutes,
+  adminRoutes: typeof adminRoutes,
+  adminBookRoutes: typeof adminBookRoutes,
+});
 app.use(cors());
 app.use(express.json());
 app.use("/api", testRoutes);
