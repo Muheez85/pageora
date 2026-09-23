@@ -388,10 +388,8 @@ const deleteBook = async (req, res) => {
   }
 };
 
-module.exports = {
-  getBooks,
-  getBookBySlug,
-  createBook,
-  updateBook,
-  deleteBook,
-};
+exports.getBooks = getBooks;
+exports.getBookBySlug = getBookBySlug;
+exports.createBook = createBook;
+exports.updateBook = updateBook;
+exports.deleteBook = deleteBook;
