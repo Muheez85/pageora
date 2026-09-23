@@ -1,7 +1,10 @@
 const express = require("express");
 
-const bookController = require("../../controllers/bookController");
+const bookControllerModule = require("../../controllers/bookController");
 
+const bookController =
+  bookControllerModule.default || bookControllerModule;
+  
 const authMiddleware = require("../../middleware/authMiddleware");
 const adminMiddleware = require("../../middleware/adminMiddleware");
 const upload = require("../../middleware/uploadMiddleware");
