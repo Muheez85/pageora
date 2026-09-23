@@ -1,11 +1,6 @@
 const express = require("express");
 
-const {
-  getBooks,
-  createBook,
-  updateBook,
-  deleteBook,
-} = require("../../controllers/bookController");
+const bookController = require("../../controllers/bookController");
 
 const authMiddleware = require("../../middleware/authMiddleware");
 const adminMiddleware = require("../../middleware/adminMiddleware");
@@ -17,15 +12,15 @@ router.use(authMiddleware);
 router.use(adminMiddleware);
 
 // Get all books
-router.get("/", getBooks);
+router.get("/", bookController.getBooks);
 
 // Create book
-router.post("/", upload.single("image"), createBook);
+router.post("/", upload.single("image"), bookController.createBook);
 
 // Update book
-router.patch("/:id", upload.single("image"), updateBook);
+router.patch("/:id", upload.single("image"), bookController.updateBook);
 
 // Delete book
-router.delete("/:id", deleteBook);
+router.delete("/:id", bookController.deleteBook);
 
 module.exports = router;
