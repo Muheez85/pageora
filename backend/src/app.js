@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 
 const app = express();
-const testRoutes = require("./routes/testRoutes");
 const bookRoutes = require("./routes/bookRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const authorRoutes = require("./routes/authorRoutes");
@@ -20,7 +19,6 @@ const adminBookRoutes = require("./routes/admin/adminBookRoutes");
 // Middleware
 
 console.log("ROUTE TYPES:", {
-  testRoutes: typeof testRoutes,
   bookRoutes: typeof bookRoutes,
   categoryRoutes: typeof categoryRoutes,
   authorRoutes: typeof authorRoutes,
@@ -38,7 +36,6 @@ console.log("ROUTE TYPES:", {
 });
 app.use(cors());
 app.use(express.json());
-app.use("/api", testRoutes);
 app.use("/api/books",bookRoutes)
 app.use("/api/categories", categoryRoutes);
 app.use("/api/authors", authorRoutes);
