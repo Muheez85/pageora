@@ -6,8 +6,8 @@
     },
     "backend": {
       "root": "backend/",
-      "framework": "node",
-      "entrypoint": "src/server.js"
+      "framework": "express",
+      "entrypoint": "src/app.js"
     }
   },
   "rewrites": [
