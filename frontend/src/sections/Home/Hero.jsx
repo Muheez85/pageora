@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 function Hero() {
   return (
     <main>
@@ -20,19 +21,19 @@ function Hero() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href="/books"
+              <Link
+                to="/books"
                 className="bg-[#124C3B] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#0d3d2f] rounded-3xl"
               >
                 Browse books
-              </a>
+              </Link>
 
-              <a
-                href="/categories"
+              <Link
+                to="/categories"
                 className="border border-[#124C3B] px-6 py-3.5 text-sm font-semibold text-[#124C3B] transition hover:bg-[#124C3B] rounded-3xl hover:text-white"
               >
                 Explore categories
-              </a>
+              </Link>
             </div>
           </div>
 

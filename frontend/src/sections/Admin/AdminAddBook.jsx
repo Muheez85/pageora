@@ -260,10 +260,9 @@ const AdminAddBook = () => {
         )
       );
 
-      if (coverImage) {
-        formData.append("coverImage", coverImage);
-      }
-
+     if (coverImage) {
+  formData.append("image", coverImage);
+}
       await createAdminBook(formData);
 
       navigate("/admin/books");

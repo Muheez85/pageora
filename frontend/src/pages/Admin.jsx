@@ -19,8 +19,7 @@ const Admin = () => {
       <Routes>
         <Route path="dashboard" element={<AdminDashboard />}/>
 
-        <Route path="*" element={
-            <Navigate to="/admin/dashboard" replace/>}/>
+       
         <Route path="books" element={<AdminBooks />} />
         <Route path="books/new" element={<AdminAddBook />}/>
         <Route path="books/edit/:id" element={<AdminEditBook />}/>
@@ -32,6 +31,10 @@ const Admin = () => {
         <Route path="customers/:id" element={<AdminCustomerDetails />}/>
         <Route path="shipping" element={<AdminShipping />} />
         <Route path="settings" element={<AdminSettings />} />
+
+
+         <Route path="*" element={
+            <Navigate to="/admin/dashboard" replace/>}/>
       </Routes>
     </AdminLayout>
   );
