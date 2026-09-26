@@ -80,7 +80,7 @@ const BookCard = ({ book }) => {
             src={book.coverImage}
             alt={book.title}
             width="600"
-            height="900"
+            height="600"
             loading="lazy"
             className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
             onError={(e) => {
