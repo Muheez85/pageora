@@ -24,6 +24,7 @@ const AdminEditBook = () => {
     isbn: "",
     categoryId: "",
     authorIds: [],
+    isEditorsPick: false,
   });
 
   const [coverImage, setCoverImage] = useState(null);
@@ -60,6 +61,7 @@ const AdminEditBook = () => {
           isbn: book.isbn || "",
           categoryId: book.categoryId || "",
           authorIds: book.authors?.map((author) => author.id) || [],
+          isEditorsPick: Boolean(book.isEditorsPick),
         });
 
         setCategories(categoriesData.categories || []);
@@ -133,6 +135,10 @@ const AdminEditBook = () => {
       data.append("stock", formData.stock);
       data.append("isbn", formData.isbn);
       data.append("categoryId", formData.categoryId);
+      data.append(
+        "isEditorsPick",
+        String(formData.isEditorsPick)
+      );
 
       data.append(
         "authorIds",
@@ -200,10 +206,8 @@ const AdminEditBook = () => {
 
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
-
           {/* Main information */}
           <div className="space-y-6 xl:col-span-2">
-
             {/* Book Information */}
             <div className="rounded-xl border border-gray-200 bg-white p-6">
               <h2 className="mb-6 text-lg font-semibold text-gray-900">
@@ -211,7 +215,6 @@ const AdminEditBook = () => {
               </h2>
 
               <div className="space-y-5">
-
                 {/* Title */}
                 <div>
                   <label className="mb-2 block text-sm font-medium text-gray-700">
@@ -241,6 +244,33 @@ const AdminEditBook = () => {
                     rows="6"
                     className="w-full resize-none rounded-lg border border-gray-300 px-4 py-3 text-sm outline-none focus:border-gray-900"
                   />
+                </div>
+
+                {/* Editor's Pick */}
+                <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                  <label className="flex cursor-pointer items-start gap-3">
+                    <input
+                      type="checkbox"
+                      checked={formData.isEditorsPick}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          isEditorsPick: e.target.checked,
+                        }))
+                      }
+                      className="mt-1 h-4 w-4 accent-green-700"
+                    />
+
+                    <span>
+                      <span className="block text-sm font-semibold text-gray-900">
+                        Mark as Editor's Pick
+                      </span>
+
+                      <span className="mt-1 block text-xs leading-5 text-gray-500">
+                        Feature this book in the Editor's Picks section on the homepage.
+                      </span>
+                    </span>
+                  </label>
                 </div>
 
                 {/* Authors */}
@@ -307,7 +337,6 @@ const AdminEditBook = () => {
               </h2>
 
               <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-
                 {/* Price */}
                 <div>
                   <label className="mb-2 block text-sm font-medium text-gray-700">
@@ -370,7 +399,7 @@ const AdminEditBook = () => {
               </h2>
 
               {!preview ? (
-                <label className="flex min-h-320px cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 px-6 text-center transition hover:border-gray-500 hover:bg-gray-50">
+                <label className="flex min-h-[320px] cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 px-6 text-center transition hover:border-gray-500 hover:bg-gray-50">
                   <Upload
                     size={32}
                     className="mb-4 text-gray-400"
@@ -396,7 +425,7 @@ const AdminEditBook = () => {
                   <img
                     src={preview}
                     alt="Book cover"
-                    className="h-320px w-full object-cover"
+                    className="h-[320px] w-full object-cover"
                   />
 
                   <button

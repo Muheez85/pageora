@@ -134,6 +134,7 @@ const createBook = async (req, res) => {
       coverImage,
       categoryId,
       authorIds,
+      isEditorsPick,
     } = req.body;
 
     if (
@@ -188,6 +189,9 @@ const createBook = async (req, res) => {
         isbn: isbn || null,
         coverImage: uploadedImageUrl || coverImage || null,
         categoryId: Number(categoryId),
+
+        isEditorsPick:
+          isEditorsPick === "true" || isEditorsPick === true,
 
         authors: parsedAuthorIds.length
           ? {
@@ -247,6 +251,7 @@ const updateBook = async (req, res) => {
       coverImage,
       categoryId,
       authorIds,
+      isEditorsPick,
     } = req.body;
 
     // Parse author IDs
@@ -319,6 +324,11 @@ const updateBook = async (req, res) => {
           categoryId !== undefined
             ? Number(categoryId)
             : existingBook.categoryId,
+
+        ...(isEditorsPick !== undefined && {
+          isEditorsPick:
+            isEditorsPick === "true" || isEditorsPick === true,
+        }),
 
         ...(parsedAuthorIds !== undefined && {
           authors: {

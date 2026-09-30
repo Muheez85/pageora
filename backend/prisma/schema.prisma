@@ -47,23 +47,23 @@ model Author {
 }
 
 model Book {
-  id          Int      @id @default(autoincrement())
-  title       String
-  slug        String?  @unique
-  description String?
-  price       Float
-  stock       Int      @default(0)
-  isbn        String?  @unique
-  coverImage  String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           Int      @id @default(autoincrement())
+  title        String
+  slug         String?  @unique
+  description  String?
+  price        Float
+  stock        Int      @default(0)
+  isbn         String?  @unique
+  coverImage   String?
+  isEditorsPick Boolean @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  authors Author[]
-
-  categoryId Int
-  category   Category    @relation(fields: [categoryId], references: [id])
-  cartItems  CartItem[]
-  orderItems OrderItem[]
+  authors      Author[]
+  categoryId   Int
+  category     Category @relation(fields: [categoryId], references: [id])
+  cartItems    CartItem[]
+  orderItems   OrderItem[]
   wishlistItems WishlistItem[]
 }
 

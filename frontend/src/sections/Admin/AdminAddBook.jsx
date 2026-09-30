@@ -30,15 +30,15 @@ const AdminAddBook = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const [form, setForm] = useState({
-    title: "",
-    description: "",
-    price: "",
-    stock: "",
-    isbn: "",
-    categoryId: "",
-  });
-
+ const [form, setForm] = useState({
+  title: "",
+  description: "",
+  price: "",
+  stock: "",
+  isbn: "",
+  categoryId: "",
+  isEditorsPick: false,
+});
   const [selectedAuthors, setSelectedAuthors] = useState([]);
 
   const [authorSearch, setAuthorSearch] = useState("");
@@ -252,7 +252,7 @@ const AdminAddBook = () => {
       formData.append("stock", form.stock);
       formData.append("isbn", form.isbn.trim());
       formData.append("categoryId", form.categoryId);
-
+      formData.append("isEditorsPick", String(form.isEditorsPick));
       formData.append(
         "authorIds",
         JSON.stringify(
@@ -571,6 +571,33 @@ const AdminAddBook = () => {
                       placeholder="Write a short description of the book..."
                       className="w-full resize-y rounded-lg border border-pageora-border bg-pageora-background px-4 py-3 text-sm leading-6 text-pageora-text outline-none transition placeholder:text-pageora-muted focus:border-pageora-green focus:ring-2 focus:ring-pageora-green/10"
                     />
+                  </div>
+                                    {/* Editor's Pick */}
+                  <div className="rounded-xl border border-pageora-border bg-pageora-background p-4">
+                    <label className="flex cursor-pointer items-start gap-3">
+                      <input
+                        type="checkbox"
+                        name="isEditorsPick"
+                        checked={form.isEditorsPick}
+                        onChange={(event) =>
+                          setForm((prev) => ({
+                            ...prev,
+                            isEditorsPick: event.target.checked,
+                          }))
+                        }
+                        className="mt-1 h-4 w-4 accent-pageora-green"
+                      />
+
+                      <span>
+                        <span className="block text-sm font-semibold text-pageora-text">
+                          Mark as Editor's Pick
+                        </span>
+
+                        <span className="mt-1 block text-xs leading-5 text-pageora-muted">
+                          Feature this book in the Editor's Picks section on the homepage.
+                        </span>
+                      </span>
+                    </label>
                   </div>
                 </div>
               </div>
